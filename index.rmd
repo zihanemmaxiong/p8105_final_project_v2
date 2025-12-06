@@ -135,7 +135,7 @@ Rats in New York are more than just a common annoyance. They’re connected to b
 
 ---
 
-#### [GitHub Repository](https://github.com/zihanemmaxiong/p8105_final_project_v2.git)
+#### [GitHub Repository](https://github.com/zihanemmaxiong/p8105_final_project_v2)
 
 
 <img src="images/Home9.png"
