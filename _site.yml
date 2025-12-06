@@ -21,8 +21,10 @@ navbar:
       href: discussion.html
     - text: "Interactive Map"
       href: interactive_map.html
+    - icon: fa-play-circle fa-lg
+      href: 
     - icon: fa-github fa-lg
-      href: https://github.com/zihanemmaxiong/p8105_final_project_v1.git
+      href: https://github.com/zihanemmaxiong/p8105_final_project_v2.git
 
 
 output:
