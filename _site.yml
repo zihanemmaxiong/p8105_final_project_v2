@@ -1,0 +1,31 @@
+
+title: "Rats and Restaurants in NYC"
+output_dir: "."
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "About us"
+      href: about_us.html
+    - text: "Proposal"
+      href: proposal.html
+    - text: "Report"
+      href: report.html
+    - text: "Data"
+      href: data.html
+    - text: "EDA"
+      href: eda.html
+    - text: "Modelling"
+      href: modelling.html
+    - text: "Discussion"
+      href: discussion.html
+    - text: "Interactive Map"
+      href: interactive_map.html
+    - icon: fa-github fa-lg
+      href: https://github.com/zihanemmaxiong/p8105_final_project_v1.git
+
+
+output:
+  html_document:
+    theme: flatly
+    css: styles.css
