@@ -1,0 +1,156 @@
+---
+title: "Proposal"
+output: 
+  html_document:
+    theme: flatly
+    toc: true
+    code_folding: hide
+    toc_float: true
+---
+<style>
+body {
+  color: #382320 !important;    
+}
+
+h1, h2, h3, h4, h5 {
+  color: #382320 !important;     
+}
+</style>
+
+<div class="body-overlay"></div>
+
+<div class="main-container">
+
+<link href="https://fonts.googleapis.com/css2?family=Kranky&display=swap" rel="stylesheet">
+
+<style>
+.rat-title {
+  font-family: 'Kranky', cursive;
+  font-size: 46px;
+  font-weight: 400;
+  color: #333333;
+  letter-spacing: 1px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+</style>
+
+<style>
+body {
+  background-image: url("images/proposal_bg.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+}
+
+.body-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 190%;    
+  height: 120%;   
+  background: rgba(255,255,255,0.05); 
+  z-index: -1;    
+  pointer-events: none;
+}
+
+.main-container {
+  background: rgba(255,255,255,0.75);
+  padding: 20px;
+  border-radius: 12px;
+}
+</style>
+
+
+<h1 class="rat-title">Project Proposal</h1>
+
+---
+
+## Group Members
+Zihan Xiong (zx2527), Wanting Dong (wd2311), Hsuanyi Lee (hl3858), Yue Hu (yh3823)
+
+---
+
+## Tentative Project Title
+What's NYC Rats' Favorite Restaurant? Exploring the association between NYC Rat Sighting Report and Restaurant Inspections Results.
+
+---
+
+## Motivations
+Urban rats 🐭🍕 are remarkably adaptive and have become a persistent feature of New York City’s environment. NYC residents frequently report rodent activity in streets, subway tracks, and near restaurants, where accumulated food waste provides an ideal habitat. Although the city conducts regular restaurant inspections and extensive pest-control efforts, rodents remain a major public health concern.
+
+This project aims to explore the 
+
+### 1. Spatial
+Do neighborhoods such as Chinatown, the Bronx, or Harlem simultaneously exhibit high rat-sighting density and high restaurant violation rates? and 
+
+### 2. Temporal
+During the summer months of 2022, when rat sightings surged, did the average restaurant inspection scores decrease?) association between two key indicators of urban sanitation:
+
+(1) citizen-reported rat sightings from the NYC 311 system, and
+
+(2) restaurant inspection violations from the Department of Health.
+
+Specifically, we would like to explore whether neighborhoods with more rat sightings also tend to have more severe restaurant violations, and whether their trends fluctuate together over time. Understanding this relationship may help identify environmental or socioeconomic factors underlying poor sanitation, and inform targeted strategies for pest control and food safety monitoring in urban areas.
+
+---
+
+## Intended Final Products
+
+### 1. Spatial clustering analysis
+Examine whether rat sightings are spatially co-located with neighborhoods that exhibit a high concentration of restaurant sanitation violations, which we will investigate using spatial joins and hotpots clustering analysis.
+
+### 2. Temporal trend & seasonality
+Explore the extent to which seasonal temperature patterns drive increases in rat activity, and whether these fluctuations are subsequently followed by higher rates of restaurant violations; to do this, we will analyze seasonal trends and evaluate potential lagged correlations.
+
+### 3. Adjusted comparison
+Based on the cuisine comparison, we consider whether neighborhood-level socioeconomic factors, such as poverty rate or population density, mediate the relationship between rat sightings and restaurant sanitation outcomes, in order to better understand possible underlying structural influences.
+
+---
+
+## Anticipated Data Source
+1. NYC 311 Rat Sightings Dataset, which mainly include incident zip code, street name, incident created date
+2. NYC Restaurants Inspections Results, which mainly include zip code, street, cuisine description, inspection date, score
+3. ACS 5-Year Estimates (American Community Survey)
+4. some other datasets as project going on
+
+---
+
+## Planned Analyses/ Visualizations
+
+### Overall
+-Generate summary statistics of rat sightings and restaurant inspection outcomes across boroughs and years.
+-Visualize overall distributions using histograms, bar charts, and boxplots to highlight variation among boroughs or cuisine types.
+-Examine correlations between average violation scores and rat-sighting rates.
+
+### 1. Spatial clustering analysis
+-Create interactive maps showing rat-sighting density and restaurant violation severity across NYC. 
+-Conduct spatial clustering analysis (e.g.hotspot mapping) to identify neighborhoods where rat activity and violations are geographically concentrated. Overlay rat-sighting hotspots and restaurant violation clusters to detect co-occurrence zones.
+
+### 2. Temporal Trend Analysis
+-Build time-series plots of monthly or seasonal changes in rat-sighting counts and average inspection scores (plotly)
+-Explore seasonal patterns (e.g., summer peaks) and potential time-lag relationships between rat activity and sanitation outcomes.
+
+### 3. Statistical Modelling
+-Conduct simple linear regression to analyze linearity between restaurant violation and rat-sighting rates.
+-Report coefficients, t-statistics p-values, and R squared to assess whether the linear relationship is statistically significant.
+
+---
+
+## Coding Challenges
+We anticipate to address:
+1) handling the large scale NYC 311 Rat Sightings Dataset and NYC Restaurants Inspections Results, managing missing, inconsistent and unnecessary data/variables, and implement data analysis and visualization using R. Since the dataset is large, optimizing code, suitable cleaning and tidying data, reproducibility will be key factors to overcome these challenges. 
+
+---
+
+## Planned Timeline
+November 7-15: Data Collection, cleaning and preliminary exploration.
+November 16-23: Conduct spatial clustering analysis, temporal trend analysis and categorical-level comparisons.
+November 24-28: Finalize all analysis and start drafting the report.
+November 29 - December 3: Complete the draft report and finalize all visualization parts.
+December 3-6: Finalize and submit.
+
+</div>
+
