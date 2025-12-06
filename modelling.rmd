@@ -1,0 +1,397 @@
+---
+title: "Modelling"
+output: 
+  html_document:
+    theme: flatly
+    toc: true
+    code_folding: hide
+    toc_float: true
+---
+
+<style>
+body {
+  color: #382320 !important;    
+}
+
+h1, h2, h3, h4, h5 {
+  color: #382320 !important;     
+}
+</style>
+
+<div class="body-overlay"></div>
+
+<div class="main-container">
+
+<link href="https://fonts.googleapis.com/css2?family=Kranky&display=swap" rel="stylesheet">
+
+<style>
+.rat-title {
+  font-family: 'Kranky', cursive;
+  font-size: 46px;
+  font-weight: 400;
+  color: #333333;
+  letter-spacing: 1px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+</style>
+
+<style>
+body {
+  background-image: url("images/proposal_bg.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+}
+
+.body-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 190%;    
+  height: 120%;   
+  background: rgba(255,255,255,0.05); 
+  z-index: -1;    
+  pointer-events: none;
+}
+
+.main-container {
+  background: rgba(255,255,255,0.75);
+  padding: 20px;
+  border-radius: 12px;
+}
+</style>
+
+
+<h1 class="rat-title">Modelling</h1>
+
+---
+
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(readr)
+library(janitor)
+library(dplyr)
+library(ggplot2)
+library(readxl)
+library(sf)
+library(spdep)
+library(tigris)
+library(lubridate)
+library(MASS)
+library(broom)
+library(knitr)
+
+
+```
+
+
+## Model Objective
+
+We used statistical modeling to examine whether changes in restaurant sanitation conditions are associated with rat sighting over time at the ZIP–month level across New York City.
+
+H0 (null hypothesis): There is no association between violation rate and rat sighting counts at the ZIP–month level.
+$$
+H_0: \beta_1 = 0 \;\Rightarrow\; IRR = 1
+$$
+
+H1 (alternative hypothesis): Higher violation rates are associated with higher rat sighting counts.
+$$
+H_1: \beta_1 > 0 \;\Rightarrow\; IRR > 1
+$$
+
+## Outcome and Predictors
+
+**Outcome** `rat_count_zip_month`: monthly rat sighting count per ZIP code
+
+**Main Exposure**: `violation_rate`: proxy variable in our model to represent restaurant sanitation in zip level, so we created this ratio of violation to inspections within each ZIP code and year-month.
+$$
+\text{violation_rate} = \frac{\text{violation_count_zip_month}}{\text{inspection_count_zip_month}}
+$$
+**Covariates**: `population_density` and `poverty_rate`.
+
+**Time controls**: `year` and `month` included as categorical fixed effects to account for seasonal and long-term trends.
+
+## Model Selection
+
+In Temporal Analysis from our EDA, we found that `rat_count_zip_month` exhibit substantial overdispersion (variance >> mean), we used Negative Binomial Regression rather than Poisson regression. Negative binomial regression estimates how predictors influence count events, especially when the data are more variable than expected under a Poisson model.
+
+```{r, message = FALSE, warning = FALSE}
+
+df_merged=read_csv("./data/zip_year_month_merged.csv") 
+
+df_model <- df_merged |>
+  # calculate violation rate
+  mutate(
+    violation_rate = violation_count_zip_month / inspection_count_zip_month,
+    violation_rate = ifelse(is.na(violation_rate) |
+                            inspection_count_zip_month == 0, 0, violation_rate)
+  ) |>
+
+  group_by(zipcode) |>
+  arrange(zipcode, year, month) |>
+  mutate(
+    lag_violation_rate = lag(violation_rate, 1)
+  ) |>
+  ungroup() |>
+
+  filter(!is.na(lag_violation_rate))
+
+```
+
+
+## Model Building and Comparison
+
+We estimated four nested negative binomial regression models to progressively evaluate the contribution of sanitation, socioeconomic, and temporal factors. 
+
+
+### Model 1 - unadjusted model (major effect)
+Only restaurant sanitation (current month violation rate)
+$$
+\log \left(E[Y_{z,t}]\right) =
+\beta_0 +
+\beta_1 \cdot \text{violation_rate}_{z,t}
+$$
+
+```{r, message = FALSE, warning = FALSE}
+model1 <- glm.nb(
+  rat_count_zip_month ~ 
+    violation_rate,
+  data = df_model)
+
+model1_results <- tidy(model1, exponentiate = TRUE, conf.int = TRUE) |>
+  mutate(
+    estimate = round(estimate, 3),
+    conf.low = round(conf.low, 3),
+    conf.high = round(conf.high, 3),
+    p.value = ifelse(p.value < 0.05, "<0.05***", round(p.value, 3))
+  ) |>
+  rename(
+    term = term,
+    IRR = estimate,
+    `2.5% CI` = conf.low,
+    `97.5% CI` = conf.high,
+    p.value = p.value
+  )
+
+kable(model1_results)
+```
+
+In Model 1, the incidence rate ratio (IRR) for violation rate is 1.134 (95% CI: 1.121–1.147, p < 0.001), which means that at 5% significant level, every 1-unit in `violation_rate` increasing, rat sightings increase by 13.4% on average.  
+
+Higher restaurant violation rates are associated with substantial increases in rat sightings, indicating that deteriorating sanitation environments may contribute to rat infestations. However, Model 1 does not control for other covariates, and may not overestimate the associaiton. 
+
+### Model 2 - SES - Adjusted
+
+Adding SES predictors
+$$
+\log \left(E[Y_{z,t}]\right) 
+=
+\beta_0 
++ \beta_1 \cdot \text{violation_rate}_{z,t}
++ \beta_2 \cdot \text{population_density}_{z}
++ \beta_3 \cdot \text{poverty_rate}_{z}
+$$
+
+```{r, message = FALSE, warning = FALSE}
+model2 <- glm.nb(
+  rat_count_zip_month ~ 
+    violation_rate+
+    population_density +
+    poverty_rate,
+  data = df_model)
+
+model2_results <- tidy(model2, exponentiate = TRUE, conf.int = TRUE) |>
+  mutate(
+    estimate = round(estimate, 3),
+    conf.low = round(conf.low, 3),
+    conf.high = round(conf.high, 3),
+    p.value = ifelse(p.value < 0.001, "<0.001***", round(p.value, 3))
+  ) |>
+  rename(
+    term = term,
+    IRR = estimate,
+    `2.5% CI` = conf.low,
+    `97.5% CI` = conf.high,
+    p.value = p.value
+  )
+
+kable(model2_results)
+```
+
+In Model 2, the incidence rate ratio (IRR) for violation rate decreased (1.108) (95% CI: 1.098–1.119, p < 0.001), which means that at 5% significant level, every 1-unit in `violation_rate` increasing, rat sightings increase by 11.08% on average, adjusted by `population_density` and `poverty_rate`. 
+
+We can also notice that the incidence rate ratio (IRR) for population density is 1.026 (95% CI: 1.025–1.027, p < 0.001) and for poverty rate is 7.893 (95% CI: 6.5–9.596, p < 0.001), and both of them are statistically significant, indicating although restaurant violation rate is significant, but SES variables also had impact on rat sightings. 
+
+### Model 3 - Time Controls - Fully Adjusted
+
+Adding Time Controls (`year`2019 and `month`1 are the reference levels)
+
+$$
+\log \left(E[Y_{z,t}]\right) 
+=
+\beta_0 
++ \beta_1 \cdot \text{violation_rate}_{z,t}
++ \beta_2 \cdot \text{population_density}_{z}
++ \beta_3 \cdot \text{poverty_rate}_{z}
++ \gamma_t(\text{month})
++ \delta_t(\text{year})
+$$
+
+```{r, message = FALSE, warning = FALSE}
+model3 <- glm.nb(
+  rat_count_zip_month ~ 
+    violation_rate+
+    population_density +
+    poverty_rate+
+    factor(year) +
+    factor(month),
+  data = df_model)
+
+model3_results <- tidy(model3, exponentiate = TRUE, conf.int = TRUE) |>
+  mutate(
+    estimate = round(estimate, 3),
+    conf.low = round(conf.low, 3),
+    conf.high = round(conf.high, 3),
+    p.value = ifelse(p.value < 0.001, "<0.001***", round(p.value, 3))
+  ) |>
+  rename(
+    term = term,
+    IRR = estimate,
+    `2.5% CI` = conf.low,
+    `97.5% CI` = conf.high,
+    p.value = p.value
+  )
+
+kable(model3_results)
+```
+
+In Model 3, the incidence rate ratio (IRR) for violation rate is 1.086 (95% CI: 1.071–1.102, p < 0.001), which means that at 5% significant level, every 1-unit in `violation_rate` increasing, rat sightings increase by 10.71% on average, adjusted by `population_density`, `poverty_rate`, `year`, `month`.
+
+After adjusting for `month` and `year` fixed effects, the association between violation rate and rat sightings remained statistically significant, though slightly attenuated (IRR ≈ 1.086).
+Seasonality and long-term trends were evident — sightings peaked in summer months (May–September) and showed a post-pandemic rebound — yet restaurant violations still demonstrated an independent contribution to rat activity.
+
+### Model 4 - lag violation rate - Adjusted
+Previous month violations predict current rat activity: we also want to take a look at the lag violation as the primary exposure to avoid reverse causality, so we created a new variable `lag_violation_rate`.
+$$
+\log \left(E[Y_{z,t}]\right] 
+=
+\beta_0 
++ \beta_1 \cdot \text{lag_violation_rate}_{z,t}
++ \beta_2 \cdot \text{population_density}_{z}
++ \beta_3 \cdot \text{poverty_rate}_{z}
++ \gamma_t(\text{month})
++ \delta_t(\text{year})
+$$
+```{r, message = FALSE, warning = FALSE}
+model4 <- glm.nb(
+  rat_count_zip_month ~ 
+    lag_violation_rate+
+    population_density +
+    poverty_rate+
+    factor(year) +
+    factor(month),
+  data = df_model)
+
+model4_results <- tidy(model4, exponentiate = TRUE, conf.int = TRUE) |>
+  mutate(
+    estimate = round(estimate, 3),
+    conf.low = round(conf.low, 3),
+    conf.high = round(conf.high, 3),
+    p.value = ifelse(p.value < 0.001, "<0.001***", round(p.value, 3))
+  ) |>
+  rename(
+    term = term,
+    IRR = estimate,
+    `2.5% CI` = conf.low,
+    `97.5% CI` = conf.high,
+    p.value = p.value
+  )
+
+kable(model4_results)
+```
+
+In Model 4, the incidence rate ratio (IRR) for lag violation rate is 1.086 (95% CI: 1.070–1.102, p < 0.001), which means that at 5% significant level, every 1-unit in `violation_rate` increasing, rat sightings increase by 10.86% on average, adjusted by `population_density`, `poverty_rate`, `year`, `month`.
+
+Using the previous month’s violation rate to predict current rat sightings, lagged violations remained a statistically significant predictor, helping reduce concerns about reverse causality.
+This suggests that poor sanitation has a cumulative impact — creating environmental conditions that allow rats to persist and proliferate over time, rather than triggering immediate effects only.
+
+## Model Evaluation
+
+To compare predictive performance across the four negative binomial models, we conducted 100 Monte-Carlo cross-validation repetitions. For each split, models were trained on a random subset of ZIP-month observations and evaluated on unseen data using Root Mean Squared Error (RMSE).
+
+```{r, message = FALSE, warning = FALSE}
+library(modelr)
+set.seed(123)
+
+cv_df <- crossv_mc(df_model, 100) |>
+  mutate(
+    train = map(train, as_tibble),
+    test  = map(test, as_tibble)
+  )
+
+```
+
+```{r, message = FALSE, warning = FALSE}
+cv_df <- cv_df |>
+  mutate(
+    m1 = map(train, \(df) glm.nb(rat_count_zip_month ~ violation_rate, data = df)),
+    m2 = map(train, \(df) glm.nb(rat_count_zip_month ~ violation_rate +
+                                 population_density + poverty_rate, data = df)),
+    m3 = map(train, \(df) glm.nb(rat_count_zip_month ~ violation_rate +
+                                 population_density + poverty_rate +
+                                 factor(year) + factor(month), data = df)),
+    m4 = map(train, \(df) glm.nb(rat_count_zip_month ~ lag_violation_rate +
+                                 population_density + poverty_rate +
+                                 factor(year) + factor(month), data = df))
+  )
+
+```
+
+```{r, message = FALSE, warning = FALSE}
+rmse_nb <- function(model, df) {
+  pred <- predict(model, newdata=df, type="response")
+  sqrt(mean((df$rat_count_zip_month - pred)^2))
+}
+
+cv_df <- cv_df |>
+  mutate(
+    rmse_m1 = map2_dbl(m1, test, rmse_nb),
+    rmse_m2 = map2_dbl(m2, test, rmse_nb),
+    rmse_m3 = map2_dbl(m3, test, rmse_nb),
+    rmse_m4 = map2_dbl(m4, test, rmse_nb),
+
+    aic_m1 = map_dbl(m1, AIC),
+    aic_m2 = map_dbl(m2, AIC),
+    aic_m3 = map_dbl(m3, AIC),
+    aic_m4 = map_dbl(m4, AIC)
+  )
+
+```
+
+Model 1 had the highest RMSE values, indicating poorer predictive accuracy. Adding socioeconomic covariates (Model 2) reduced RMSE substantially, while further adding time controls (Model 3) and lagged exposure (Model 4) continued to improve prediction. From the RMSE plot, Model 4 has the lowest and most concentrated RMSE distribution.
+This indicates that incorporating a lagged violation rate improves prediction accuracy and model stability.
+
+It suggests that poor sanitation does not trigger rat activity immediately but has a delayed and cumulative impact on infestation risk.
+```{r, message = FALSE, warning = FALSE}
+
+cv_df |>
+  dplyr::select(starts_with("rmse")) |>
+  tidyr::pivot_longer(everything(),
+               names_to="model", values_to="rmse",
+               names_prefix="rmse_") |>
+  mutate(model=factor(model, levels=c("m1","m2","m3","m4"))) |>
+  ggplot(aes(x=model, y=rmse)) +
+  geom_violin(fill="lightblue") +
+  theme_minimal() +
+  labs(
+    x="Model",
+    y="RMSE",
+    title="Cross-Validation Performance: RMSE"
+  )
+
+```
+
+</div>

@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Modelling</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about_us.html">About us</a>
+</li>
+<li>
+  <a href="proposal.html">Proposal</a>
+</li>
+<li>
+  <a href="report.html">Report</a>
+</li>
+<li>
+  <a href="data.html">Data</a>
+</li>
+<li>
+  <a href="eda.html">EDA</a>
+</li>
+<li>
+  <a href="modelling.html">Modelling</a>
+</li>
+<li>
+  <a href="discussion.html">Discussion</a>
+</li>
+<li>
+  <a href="interactive_map.html">Interactive Map</a>
+</li>
+<li>
+  <a href="https://github.com/zihanemmaxiong/p8105_final_project_v1.git">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Modelling</h1>
+
+</div>
+
+
+<style>
+body {
+  color: #382320 !important;    
+}
+
+h1, h2, h3, h4, h5 {
+  color: #382320 !important;     
+}
+</style>
+<div class="body-overlay">
+
+</div>
+<div class="main-container">
+<p><link href="https://fonts.googleapis.com/css2?family=Kranky&display=swap" rel="stylesheet"></p>
+<style>
+.rat-title {
+  font-family: 'Kranky', cursive;
+  font-size: 46px;
+  font-weight: 400;
+  color: #333333;
+  letter-spacing: 1px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+</style>
+<style>
+body {
+  background-image: url("images/proposal_bg.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+}
+
+.body-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 190%;    
+  height: 120%;   
+  background: rgba(255,255,255,0.05); 
+  z-index: -1;    
+  pointer-events: none;
+}
+
+.main-container {
+  background: rgba(255,255,255,0.75);
+  padding: 20px;
+  border-radius: 12px;
+}
+</style>
+<h1 class="rat-title">
+Modelling
+</h1>
+<hr />
+<pre class="r"><code>library(tidyverse)
+library(readr)
+library(janitor)
+library(dplyr)
+library(ggplot2)
+library(readxl)
+library(sf)
+library(spdep)
+library(tigris)
+library(lubridate)
+library(MASS)
+library(broom)
+library(knitr)</code></pre>
+<div id="model-objective" class="section level2">
+<h2>Model Objective</h2>
+<p>We used statistical modeling to examine whether changes in restaurant
+sanitation conditions are associated with rat sighting over time at the
+ZIP–month level across New York City.</p>
+<p>H0 (null hypothesis): There is no association between violation rate
+and rat sighting counts at the ZIP–month level. <span
+class="math display">\[
+H_0: \beta_1 = 0 \;\Rightarrow\; IRR = 1
+\]</span></p>
+<p>H1 (alternative hypothesis): Higher violation rates are associated
+with higher rat sighting counts. <span class="math display">\[
+H_1: \beta_1 &gt; 0 \;\Rightarrow\; IRR &gt; 1
+\]</span></p>
+</div>
+<div id="outcome-and-predictors" class="section level2">
+<h2>Outcome and Predictors</h2>
+<p><strong>Outcome</strong> <code>rat_count_zip_month</code>: monthly
+rat sighting count per ZIP code</p>
+<p><strong>Main Exposure</strong>: <code>violation_rate</code>: proxy
+variable in our model to represent restaurant sanitation in zip level,
+so we created this ratio of violation to inspections within each ZIP
+code and year-month. <span class="math display">\[
+\text{violation_rate} =
+\frac{\text{violation_count_zip_month}}{\text{inspection_count_zip_month}}
+\]</span> <strong>Covariates</strong>: <code>population_density</code>
+and <code>poverty_rate</code>.</p>
+<p><strong>Time controls</strong>: <code>year</code> and
+<code>month</code> included as categorical fixed effects to account for
+seasonal and long-term trends.</p>
+</div>
+<div id="model-selection" class="section level2">
+<h2>Model Selection</h2>
+<p>In Temporal Analysis from our EDA, we found that
+<code>rat_count_zip_month</code> exhibit substantial overdispersion
+(variance &gt;&gt; mean), we used Negative Binomial Regression rather
+than Poisson regression. Negative binomial regression estimates how
+predictors influence count events, especially when the data are more
+variable than expected under a Poisson model.</p>
+<pre class="r"><code>df_merged=read_csv(&quot;./data/zip_year_month_merged.csv&quot;) 
+
+df_model &lt;- df_merged |&gt;
+  # calculate violation rate
+  mutate(
+    violation_rate = violation_count_zip_month / inspection_count_zip_month,
+    violation_rate = ifelse(is.na(violation_rate) |
+                            inspection_count_zip_month == 0, 0, violation_rate)
+  ) |&gt;
+
+  group_by(zipcode) |&gt;
+  arrange(zipcode, year, month) |&gt;
+  mutate(
+    lag_violation_rate = lag(violation_rate, 1)
+  ) |&gt;
+  ungroup() |&gt;
+
+  filter(!is.na(lag_violation_rate))</code></pre>
+</div>
+<div id="model-building-and-comparison" class="section level2">
+<h2>Model Building and Comparison</h2>
+<p>We estimated four nested negative binomial regression models to
+progressively evaluate the contribution of sanitation, socioeconomic,
+and temporal factors.</p>
+<div id="model-1---unadjusted-model-major-effect"
+class="section level3">
+<h3>Model 1 - unadjusted model (major effect)</h3>
+<p>Only restaurant sanitation (current month violation rate) <span
+class="math display">\[
+\log \left(E[Y_{z,t}]\right) =
+\beta_0 +
+\beta_1 \cdot \text{violation_rate}_{z,t}
+\]</span></p>
+<pre class="r"><code>model1 &lt;- glm.nb(
+  rat_count_zip_month ~ 
+    violation_rate,
+  data = df_model)
+
+model1_results &lt;- tidy(model1, exponentiate = TRUE, conf.int = TRUE) |&gt;
+  mutate(
+    estimate = round(estimate, 3),
+    conf.low = round(conf.low, 3),
+    conf.high = round(conf.high, 3),
+    p.value = ifelse(p.value &lt; 0.05, &quot;&lt;0.05***&quot;, round(p.value, 3))
+  ) |&gt;
+  rename(
+    term = term,
+    IRR = estimate,
+    `2.5% CI` = conf.low,
+    `97.5% CI` = conf.high,
+    p.value = p.value
+  )
+
+kable(model1_results)</code></pre>
+<table>
+<colgroup>
+<col width="22%" />
+<col width="8%" />
+<col width="14%" />
+<col width="14%" />
+<col width="13%" />
+<col width="11%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">IRR</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="left">p.value</th>
+<th align="right">2.5% CI</th>
+<th align="right">97.5% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">8.060</td>
+<td align="right">0.0145260</td>
+<td align="right">143.67164</td>
+<td align="left">&lt;0.05***</td>
+<td align="right">7.830</td>
+<td align="right">8.300</td>
+</tr>
+<tr class="even">
+<td align="left">violation_rate</td>
+<td align="right">1.134</td>
+<td align="right">0.0055727</td>
+<td align="right">22.60395</td>
+<td align="left">&lt;0.05***</td>
+<td align="right">1.121</td>
+<td align="right">1.147</td>
+</tr>
+</tbody>
+</table>
+<p>In Model 1, the incidence rate ratio (IRR) for violation rate is
+1.134 (95% CI: 1.121–1.147, p &lt; 0.001), which means that at 5%
+significant level, every 1-unit in <code>violation_rate</code>
+increasing, rat sightings increase by 13.4% on average.</p>
+<p>Higher restaurant violation rates are associated with substantial
+increases in rat sightings, indicating that deteriorating sanitation
+environments may contribute to rat infestations. However, Model 1 does
+not control for other covariates, and may not overestimate the
+associaiton.</p>
+</div>
+<div id="model-2---ses---adjusted" class="section level3">
+<h3>Model 2 - SES - Adjusted</h3>
+<p>Adding SES predictors <span class="math display">\[
+\log \left(E[Y_{z,t}]\right)
+=
+\beta_0
++ \beta_1 \cdot \text{violation_rate}_{z,t}
++ \beta_2 \cdot \text{population_density}_{z}
++ \beta_3 \cdot \text{poverty_rate}_{z}
+\]</span></p>
+<pre class="r"><code>model2 &lt;- glm.nb(
+  rat_count_zip_month ~ 
+    violation_rate+
+    population_density +
+    poverty_rate,
+  data = df_model)
+
+model2_results &lt;- tidy(model2, exponentiate = TRUE, conf.int = TRUE) |&gt;
+  mutate(
+    estimate = round(estimate, 3),
+    conf.low = round(conf.low, 3),
+    conf.high = round(conf.high, 3),
+    p.value = ifelse(p.value &lt; 0.001, &quot;&lt;0.001***&quot;, round(p.value, 3))
+  ) |&gt;
+  rename(
+    term = term,
+    IRR = estimate,
+    `2.5% CI` = conf.low,
+    `97.5% CI` = conf.high,
+    p.value = p.value
+  )
+
+kable(model2_results)</code></pre>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="8%" />
+<col width="13%" />
+<col width="13%" />
+<col width="13%" />
+<col width="11%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">IRR</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="left">p.value</th>
+<th align="right">2.5% CI</th>
+<th align="right">97.5% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">1.402</td>
+<td align="right">0.0223067</td>
+<td align="right">15.15695</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.335</td>
+<td align="right">1.473</td>
+</tr>
+<tr class="even">
+<td align="left">violation_rate</td>
+<td align="right">1.108</td>
+<td align="right">0.0046819</td>
+<td align="right">21.97650</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.098</td>
+<td align="right">1.119</td>
+</tr>
+<tr class="odd">
+<td align="left">population_density</td>
+<td align="right">1.026</td>
+<td align="right">0.0003544</td>
+<td align="right">73.20820</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.025</td>
+<td align="right">1.027</td>
+</tr>
+<tr class="even">
+<td align="left">poverty_rate</td>
+<td align="right">7.893</td>
+<td align="right">0.0893442</td>
+<td align="right">23.12423</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">6.500</td>
+<td align="right">9.596</td>
+</tr>
+</tbody>
+</table>
+<p>In Model 2, the incidence rate ratio (IRR) for violation rate
+decreased (1.108) (95% CI: 1.098–1.119, p &lt; 0.001), which means that
+at 5% significant level, every 1-unit in <code>violation_rate</code>
+increasing, rat sightings increase by 11.08% on average, adjusted by
+<code>population_density</code> and <code>poverty_rate</code>.</p>
+<p>We can also notice that the incidence rate ratio (IRR) for population
+density is 1.026 (95% CI: 1.025–1.027, p &lt; 0.001) and for poverty
+rate is 7.893 (95% CI: 6.5–9.596, p &lt; 0.001), and both of them are
+statistically significant, indicating although restaurant violation rate
+is significant, but SES variables also had impact on rat sightings.</p>
+</div>
+<div id="model-3---time-controls---fully-adjusted"
+class="section level3">
+<h3>Model 3 - Time Controls - Fully Adjusted</h3>
+<p>Adding Time Controls (<code>year</code>2019 and <code>month</code>1
+are the reference levels)</p>
+<p><span class="math display">\[
+\log \left(E[Y_{z,t}]\right)
+=
+\beta_0
++ \beta_1 \cdot \text{violation_rate}_{z,t}
++ \beta_2 \cdot \text{population_density}_{z}
++ \beta_3 \cdot \text{poverty_rate}_{z}
++ \gamma_t(\text{month})
++ \delta_t(\text{year})
+\]</span></p>
+<pre class="r"><code>model3 &lt;- glm.nb(
+  rat_count_zip_month ~ 
+    violation_rate+
+    population_density +
+    poverty_rate+
+    factor(year) +
+    factor(month),
+  data = df_model)
+
+model3_results &lt;- tidy(model3, exponentiate = TRUE, conf.int = TRUE) |&gt;
+  mutate(
+    estimate = round(estimate, 3),
+    conf.low = round(conf.low, 3),
+    conf.high = round(conf.high, 3),
+    p.value = ifelse(p.value &lt; 0.001, &quot;&lt;0.001***&quot;, round(p.value, 3))
+  ) |&gt;
+  rename(
+    term = term,
+    IRR = estimate,
+    `2.5% CI` = conf.low,
+    `97.5% CI` = conf.high,
+    p.value = p.value
+  )
+
+kable(model3_results)</code></pre>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="8%" />
+<col width="13%" />
+<col width="15%" />
+<col width="13%" />
+<col width="10%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">IRR</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="left">p.value</th>
+<th align="right">2.5% CI</th>
+<th align="right">97.5% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">0.923</td>
+<td align="right">0.0452040</td>
+<td align="right">-1.7689280</td>
+<td align="left">0.077</td>
+<td align="right">0.843</td>
+<td align="right">1.011</td>
+</tr>
+<tr class="even">
+<td align="left">violation_rate</td>
+<td align="right">1.086</td>
+<td align="right">0.0066114</td>
+<td align="right">12.4920533</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.071</td>
+<td align="right">1.102</td>
+</tr>
+<tr class="odd">
+<td align="left">population_density</td>
+<td align="right">1.026</td>
+<td align="right">0.0003444</td>
+<td align="right">75.5556450</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.026</td>
+<td align="right">1.027</td>
+</tr>
+<tr class="even">
+<td align="left">poverty_rate</td>
+<td align="right">8.011</td>
+<td align="right">0.0859835</td>
+<td align="right">24.2000466</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">6.647</td>
+<td align="right">9.664</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(year)2020</td>
+<td align="right">0.994</td>
+<td align="right">0.0310548</td>
+<td align="right">-0.2074888</td>
+<td align="left">0.836</td>
+<td align="right">0.935</td>
+<td align="right">1.056</td>
+</tr>
+<tr class="even">
+<td align="left">factor(year)2021</td>
+<td align="right">1.419</td>
+<td align="right">0.0307259</td>
+<td align="right">11.3998243</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.337</td>
+<td align="right">1.507</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(year)2022</td>
+<td align="right">1.258</td>
+<td align="right">0.0353234</td>
+<td align="right">6.4957191</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.171</td>
+<td align="right">1.351</td>
+</tr>
+<tr class="even">
+<td align="left">factor(year)2023</td>
+<td align="right">1.241</td>
+<td align="right">0.0359272</td>
+<td align="right">6.0178904</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.154</td>
+<td align="right">1.335</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(year)2024</td>
+<td align="right">1.178</td>
+<td align="right">0.0365402</td>
+<td align="right">4.4843757</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.094</td>
+<td align="right">1.269</td>
+</tr>
+<tr class="even">
+<td align="left">factor(month)2</td>
+<td align="right">0.917</td>
+<td align="right">0.0450035</td>
+<td align="right">-1.9365285</td>
+<td align="left">0.053</td>
+<td align="right">0.840</td>
+<td align="right">1.000</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(month)3</td>
+<td align="right">1.153</td>
+<td align="right">0.0445686</td>
+<td align="right">3.1948529</td>
+<td align="left">0.001</td>
+<td align="right">1.057</td>
+<td align="right">1.258</td>
+</tr>
+<tr class="even">
+<td align="left">factor(month)4</td>
+<td align="right">1.306</td>
+<td align="right">0.0443632</td>
+<td align="right">6.0162877</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.198</td>
+<td align="right">1.424</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(month)5</td>
+<td align="right">1.621</td>
+<td align="right">0.0440625</td>
+<td align="right">10.9595427</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.487</td>
+<td align="right">1.766</td>
+</tr>
+<tr class="even">
+<td align="left">factor(month)6</td>
+<td align="right">1.670</td>
+<td align="right">0.0440264</td>
+<td align="right">11.6521969</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.533</td>
+<td align="right">1.820</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(month)7</td>
+<td align="right">1.724</td>
+<td align="right">0.0440184</td>
+<td align="right">12.3767753</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.582</td>
+<td align="right">1.879</td>
+</tr>
+<tr class="even">
+<td align="left">factor(month)8</td>
+<td align="right">1.722</td>
+<td align="right">0.0440481</td>
+<td align="right">12.3351748</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.580</td>
+<td align="right">1.876</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(month)9</td>
+<td align="right">1.526</td>
+<td align="right">0.0441635</td>
+<td align="right">9.5654902</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.400</td>
+<td align="right">1.663</td>
+</tr>
+<tr class="even">
+<td align="left">factor(month)10</td>
+<td align="right">1.368</td>
+<td align="right">0.0443199</td>
+<td align="right">7.0744034</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.255</td>
+<td align="right">1.492</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(month)11</td>
+<td align="right">1.012</td>
+<td align="right">0.0448139</td>
+<td align="right">0.2752933</td>
+<td align="left">0.783</td>
+<td align="right">0.928</td>
+<td align="right">1.105</td>
+</tr>
+<tr class="even">
+<td align="left">factor(month)12</td>
+<td align="right">0.819</td>
+<td align="right">0.0452732</td>
+<td align="right">-4.4178590</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">0.750</td>
+<td align="right">0.894</td>
+</tr>
+</tbody>
+</table>
+<p>In Model 3, the incidence rate ratio (IRR) for violation rate is
+1.086 (95% CI: 1.071–1.102, p &lt; 0.001), which means that at 5%
+significant level, every 1-unit in <code>violation_rate</code>
+increasing, rat sightings increase by 10.71% on average, adjusted by
+<code>population_density</code>, <code>poverty_rate</code>,
+<code>year</code>, <code>month</code>.</p>
+<p>After adjusting for <code>month</code> and <code>year</code> fixed
+effects, the association between violation rate and rat sightings
+remained statistically significant, though slightly attenuated (IRR ≈
+1.086). Seasonality and long-term trends were evident — sightings peaked
+in summer months (May–September) and showed a post-pandemic rebound —
+yet restaurant violations still demonstrated an independent contribution
+to rat activity.</p>
+</div>
+<div id="model-4---lag-violation-rate---adjusted"
+class="section level3">
+<h3>Model 4 - lag violation rate - Adjusted</h3>
+<p>Previous month violations predict current rat activity: we also want
+to take a look at the lag violation as the primary exposure to avoid
+reverse causality, so we created a new variable
+<code>lag_violation_rate</code>. <span class="math display">\[
+\log \left(E[Y_{z,t}]\right]
+=
+\beta_0
++ \beta_1 \cdot \text{lag_violation_rate}_{z,t}
++ \beta_2 \cdot \text{population_density}_{z}
++ \beta_3 \cdot \text{poverty_rate}_{z}
++ \gamma_t(\text{month})
++ \delta_t(\text{year})
+\]</span></p>
+<pre class="r"><code>model4 &lt;- glm.nb(
+  rat_count_zip_month ~ 
+    lag_violation_rate+
+    population_density +
+    poverty_rate+
+    factor(year) +
+    factor(month),
+  data = df_model)
+
+model4_results &lt;- tidy(model4, exponentiate = TRUE, conf.int = TRUE) |&gt;
+  mutate(
+    estimate = round(estimate, 3),
+    conf.low = round(conf.low, 3),
+    conf.high = round(conf.high, 3),
+    p.value = ifelse(p.value &lt; 0.001, &quot;&lt;0.001***&quot;, round(p.value, 3))
+  ) |&gt;
+  rename(
+    term = term,
+    IRR = estimate,
+    `2.5% CI` = conf.low,
+    `97.5% CI` = conf.high,
+    p.value = p.value
+  )
+
+kable(model4_results)</code></pre>
+<table>
+<colgroup>
+<col width="26%" />
+<col width="8%" />
+<col width="13%" />
+<col width="15%" />
+<col width="13%" />
+<col width="10%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">IRR</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="left">p.value</th>
+<th align="right">2.5% CI</th>
+<th align="right">97.5% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">0.932</td>
+<td align="right">0.0452611</td>
+<td align="right">-1.5509046</td>
+<td align="left">0.121</td>
+<td align="right">0.851</td>
+<td align="right">1.021</td>
+</tr>
+<tr class="even">
+<td align="left">lag_violation_rate</td>
+<td align="right">1.086</td>
+<td align="right">0.0066534</td>
+<td align="right">12.3672269</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.070</td>
+<td align="right">1.102</td>
+</tr>
+<tr class="odd">
+<td align="left">population_density</td>
+<td align="right">1.026</td>
+<td align="right">0.0003443</td>
+<td align="right">75.5982409</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.026</td>
+<td align="right">1.027</td>
+</tr>
+<tr class="even">
+<td align="left">poverty_rate</td>
+<td align="right">8.027</td>
+<td align="right">0.0859992</td>
+<td align="right">24.2191739</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">6.660</td>
+<td align="right">9.684</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(year)2020</td>
+<td align="right">0.991</td>
+<td align="right">0.0310608</td>
+<td align="right">-0.2806213</td>
+<td align="left">0.779</td>
+<td align="right">0.933</td>
+<td align="right">1.053</td>
+</tr>
+<tr class="even">
+<td align="left">factor(year)2021</td>
+<td align="right">1.440</td>
+<td align="right">0.0306366</td>
+<td align="right">11.8924966</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.356</td>
+<td align="right">1.528</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(year)2022</td>
+<td align="right">1.268</td>
+<td align="right">0.0350627</td>
+<td align="right">6.7648433</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.180</td>
+<td align="right">1.361</td>
+</tr>
+<tr class="even">
+<td align="left">factor(year)2023</td>
+<td align="right">1.241</td>
+<td align="right">0.0359818</td>
+<td align="right">6.0076595</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.153</td>
+<td align="right">1.336</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(year)2024</td>
+<td align="right">1.176</td>
+<td align="right">0.0366213</td>
+<td align="right">4.4298133</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.091</td>
+<td align="right">1.268</td>
+</tr>
+<tr class="even">
+<td align="left">factor(month)2</td>
+<td align="right">0.909</td>
+<td align="right">0.0450314</td>
+<td align="right">-2.1108607</td>
+<td align="left">0.035</td>
+<td align="right">0.833</td>
+<td align="right">0.993</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(month)3</td>
+<td align="right">1.141</td>
+<td align="right">0.0446001</td>
+<td align="right">2.9663687</td>
+<td align="left">0.003</td>
+<td align="right">1.046</td>
+<td align="right">1.245</td>
+</tr>
+<tr class="even">
+<td align="left">factor(month)4</td>
+<td align="right">1.283</td>
+<td align="right">0.0444078</td>
+<td align="right">5.6117528</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.176</td>
+<td align="right">1.399</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(month)5</td>
+<td align="right">1.605</td>
+<td align="right">0.0440858</td>
+<td align="right">10.7273401</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.472</td>
+<td align="right">1.749</td>
+</tr>
+<tr class="even">
+<td align="left">factor(month)6</td>
+<td align="right">1.655</td>
+<td align="right">0.0440544</td>
+<td align="right">11.4350093</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.518</td>
+<td align="right">1.803</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(month)7</td>
+<td align="right">1.735</td>
+<td align="right">0.0440192</td>
+<td align="right">12.5169380</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.592</td>
+<td align="right">1.890</td>
+</tr>
+<tr class="even">
+<td align="left">factor(month)8</td>
+<td align="right">1.707</td>
+<td align="right">0.0441016</td>
+<td align="right">12.1225739</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.566</td>
+<td align="right">1.860</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(month)9</td>
+<td align="right">1.488</td>
+<td align="right">0.0443205</td>
+<td align="right">8.9641349</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.364</td>
+<td align="right">1.622</td>
+</tr>
+<tr class="even">
+<td align="left">factor(month)10</td>
+<td align="right">1.362</td>
+<td align="right">0.0443827</td>
+<td align="right">6.9609778</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">1.249</td>
+<td align="right">1.485</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(month)11</td>
+<td align="right">0.992</td>
+<td align="right">0.0449203</td>
+<td align="right">-0.1806283</td>
+<td align="left">0.857</td>
+<td align="right">0.909</td>
+<td align="right">1.083</td>
+</tr>
+<tr class="even">
+<td align="left">factor(month)12</td>
+<td align="right">0.817</td>
+<td align="right">0.0453040</td>
+<td align="right">-4.4617546</td>
+<td align="left">&lt;0.001***</td>
+<td align="right">0.748</td>
+<td align="right">0.892</td>
+</tr>
+</tbody>
+</table>
+<p>In Model 4, the incidence rate ratio (IRR) for lag violation rate is
+1.086 (95% CI: 1.070–1.102, p &lt; 0.001), which means that at 5%
+significant level, every 1-unit in <code>violation_rate</code>
+increasing, rat sightings increase by 10.86% on average, adjusted by
+<code>population_density</code>, <code>poverty_rate</code>,
+<code>year</code>, <code>month</code>.</p>
+<p>Using the previous month’s violation rate to predict current rat
+sightings, lagged violations remained a statistically significant
+predictor, helping reduce concerns about reverse causality. This
+suggests that poor sanitation has a cumulative impact — creating
+environmental conditions that allow rats to persist and proliferate over
+time, rather than triggering immediate effects only.</p>
+</div>
+</div>
+<div id="model-evaluation" class="section level2">
+<h2>Model Evaluation</h2>
+<p>To compare predictive performance across the four negative binomial
+models, we conducted 100 Monte-Carlo cross-validation repetitions. For
+each split, models were trained on a random subset of ZIP-month
+observations and evaluated on unseen data using Root Mean Squared Error
+(RMSE).</p>
+<pre class="r"><code>library(modelr)
+set.seed(123)
+
+cv_df &lt;- crossv_mc(df_model, 100) |&gt;
+  mutate(
+    train = map(train, as_tibble),
+    test  = map(test, as_tibble)
+  )</code></pre>
+<pre class="r"><code>cv_df &lt;- cv_df |&gt;
+  mutate(
+    m1 = map(train, \(df) glm.nb(rat_count_zip_month ~ violation_rate, data = df)),
+    m2 = map(train, \(df) glm.nb(rat_count_zip_month ~ violation_rate +
+                                 population_density + poverty_rate, data = df)),
+    m3 = map(train, \(df) glm.nb(rat_count_zip_month ~ violation_rate +
+                                 population_density + poverty_rate +
+                                 factor(year) + factor(month), data = df)),
+    m4 = map(train, \(df) glm.nb(rat_count_zip_month ~ lag_violation_rate +
+                                 population_density + poverty_rate +
+                                 factor(year) + factor(month), data = df))
+  )</code></pre>
+<pre class="r"><code>rmse_nb &lt;- function(model, df) {
+  pred &lt;- predict(model, newdata=df, type=&quot;response&quot;)
+  sqrt(mean((df$rat_count_zip_month - pred)^2))
+}
+
+cv_df &lt;- cv_df |&gt;
+  mutate(
+    rmse_m1 = map2_dbl(m1, test, rmse_nb),
+    rmse_m2 = map2_dbl(m2, test, rmse_nb),
+    rmse_m3 = map2_dbl(m3, test, rmse_nb),
+    rmse_m4 = map2_dbl(m4, test, rmse_nb),
+
+    aic_m1 = map_dbl(m1, AIC),
+    aic_m2 = map_dbl(m2, AIC),
+    aic_m3 = map_dbl(m3, AIC),
+    aic_m4 = map_dbl(m4, AIC)
+  )</code></pre>
+<p>Model 1 had the highest RMSE values, indicating poorer predictive
+accuracy. Adding socioeconomic covariates (Model 2) reduced RMSE
+substantially, while further adding time controls (Model 3) and lagged
+exposure (Model 4) continued to improve prediction. From the RMSE plot,
+Model 4 has the lowest and most concentrated RMSE distribution. This
+indicates that incorporating a lagged violation rate improves prediction
+accuracy and model stability.</p>
+<p>It suggests that poor sanitation does not trigger rat activity
+immediately but has a delayed and cumulative impact on infestation
+risk.</p>
+<pre class="r"><code>cv_df |&gt;
+  dplyr::select(starts_with(&quot;rmse&quot;)) |&gt;
+  tidyr::pivot_longer(everything(),
+               names_to=&quot;model&quot;, values_to=&quot;rmse&quot;,
+               names_prefix=&quot;rmse_&quot;) |&gt;
+  mutate(model=factor(model, levels=c(&quot;m1&quot;,&quot;m2&quot;,&quot;m3&quot;,&quot;m4&quot;))) |&gt;
+  ggplot(aes(x=model, y=rmse)) +
+  geom_violin(fill=&quot;lightblue&quot;) +
+  theme_minimal() +
+  labs(
+    x=&quot;Model&quot;,
+    y=&quot;RMSE&quot;,
+    title=&quot;Cross-Validation Performance: RMSE&quot;
+  )</code></pre>
+<p><img src="modelling_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
