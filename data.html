@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Data</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about_us.html">About us</a>
+</li>
+<li>
+  <a href="proposal.html">Proposal</a>
+</li>
+<li>
+  <a href="report.html">Report</a>
+</li>
+<li>
+  <a href="data.html">Data</a>
+</li>
+<li>
+  <a href="eda.html">EDA</a>
+</li>
+<li>
+  <a href="modelling.html">Modelling</a>
+</li>
+<li>
+  <a href="discussion.html">Discussion</a>
+</li>
+<li>
+  <a href="interactive_map.html">Interactive Map</a>
+</li>
+<li>
+  <a href="https://github.com/zihanemmaxiong/p8105_final_project_v1.git">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Data</h1>
+
+</div>
+
+
+<style>
+body {
+  color: #382320 !important;    
+}
+
+h1, h2, h3, h4, h5 {
+  color: #382320 !important;     
+}
+</style>
+<div class="body-overlay">
+
+</div>
+<div class="main-container">
+<p><link href="https://fonts.googleapis.com/css2?family=Kranky&display=swap" rel="stylesheet"></p>
+<style>
+.rat-title {
+  font-family: 'Kranky', cursive;
+  font-size: 46px;
+  font-weight: 400;
+  color: #333333;
+  letter-spacing: 1px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+</style>
+<style>
+body {
+  background-image: url("images/proposal_bg.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+}
+
+.body-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 190%;    
+  height: 120%;   
+  background: rgba(255,255,255,0.05); 
+  z-index: -1;    
+  pointer-events: none;
+}
+
+.main-container {
+  background: rgba(255,255,255,0.75);
+  padding: 20px;
+  border-radius: 12px;
+}
+</style>
+<h1 class="rat-title">
+Data
+</h1>
+<pre class="r"><code>library(tidyverse)
+library(readr)
+library(janitor)
+library(dplyr)
+library(ggplot2)
+library(readxl)
+library(sf)
+library(spdep)
+library(tigris)
+library(lubridate)</code></pre>
+<p>We integrated and merged three datasets for our analysis: <strong>Rat
+Sighting</strong>, <strong>NYC Restaurant Inspection Result</strong>,and
+<strong>ACS 2019 5-year estimates</strong>. To ensure temporal
+consistency and spatial alignment across datasets, the following steps
+were applied.</p>
+<p><em>Notice: For the merged data and its cleaning process, we didn’t
+include <code>longitude</code> and <code>latitude</code> because they
+are not able to be merged on zipcode x year x month level. We left them
+for Spatial Analysis specifically. For <strong>all</strong> 3 datasets,
+only records with ZIP codes 10001–11697 were included (notice that NYC
+zip codes are not cumulative so only zipcodes in this range+overlaps
+between 3 datasets). For <strong>Rat Sighting</strong> and <strong>NYC
+Restaurant Inspection Result</strong> datasets, records with dates
+between 2019-01-01 and 2024-12-31 were included.</em></p>
+<pre class="r"><code>rats_clean_2019_2024 &lt;- read_csv(
+  &quot;data/Rat_Sightings_20251106.csv&quot;,
+  na = c(&quot;NA&quot;, &quot;&quot;, &quot;0&quot;)
+) |&gt;
+  janitor::clean_names() |&gt;
+  # covert datetime to example: &quot;2024-12-31 18:15:58&quot;
+  mutate(
+    created_datetime = lubridate::parse_date_time(
+      created_date,
+      orders = &quot;Y b d I:M:S p&quot;,
+      tz = &quot;America/New_York&quot;
+    ),
+    created_date_only = as.Date(created_datetime)
+  ) |&gt;
+  # filter: 2019–2024 and zipcodes 10001-11697
+  filter(
+    !is.na(created_datetime),
+    created_date_only &gt;= as.Date(&quot;2019-01-01&quot;),
+    created_date_only &lt;= as.Date(&quot;2024-12-31&quot;)
+  ) |&gt;
+  mutate(
+    incident_zip = incident_zip |&gt;
+      as.character() |&gt;
+      stringr::str_extract(&quot;\\d+&quot;) |&gt;
+      stringr::str_pad(width = 5, side = &quot;left&quot;, pad = &quot;0&quot;)
+  ) |&gt;
+  filter(
+    incident_zip &gt;= &quot;10001&quot;,
+    incident_zip &lt;= &quot;11697&quot;
+  ) |&gt;
+  dplyr::select(
+    dplyr::any_of(c(
+      &quot;unique_key&quot;, 
+      &quot;created_date_only&quot;,
+      &quot;complaint_type&quot;, 
+      &quot;descriptor&quot;, 
+      &quot;status&quot;, 
+      &quot;resolution_action_updated_date&quot;, 
+      &quot;location_type&quot;, 
+      &quot;incident_zip&quot;,
+      &quot;incident_address&quot;, 
+      &quot;street_name&quot;, 
+      &quot;cross_street_1&quot;, 
+      &quot;cross_street_2&quot;, 
+      &quot;city&quot;, 
+      &quot;borough&quot;,
+      &quot;latitude&quot;,
+      &quot;longitude&quot;,
+      &quot;community_board&quot;, 
+      &quot;council_district&quot;, 
+      &quot;census_tract&quot;, 
+      &quot;nta&quot; 
+    ))
+  ) |&gt;
+  # keep for spatial analysis
+  filter(
+    !is.na(incident_zip),
+    !is.na(latitude),
+    !is.na(longitude)
+  ) |&gt;
+  # standardize zipcode, year, and month
+  mutate(
+    zipcode = incident_zip,
+    year    = lubridate::year(created_date_only),
+    month   = lubridate::month(created_date_only)
+  )</code></pre>
+<div id="data-source-1" class="section level2">
+<h2>Data Source 1</h2>
+<p><strong><a
+href="https://data.cityofnewyork.us/Social-Services/Rat-Sightings/3q43-55fe/about_data">Rat
+Sighting</a></strong>: Each row represents one rat sighting report based
+on the <a
+href="https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9/about_data">311
+Service Requests</a>. Key raw fields include complaint date, exact
+address, borough, zipcodes, and geographic coordinates.</p>
+<p><strong>Data Pre-cleaning steps included:</strong></p>
+<ul>
+<li><p>Converted raw timestamps <code>created_date_only</code> into
+standardized datetime (yyyy-mm-dd), then create new variables
+<code>year</code> and <code>month</code>.</p></li>
+<li><p>Extracted valid 5-digit NYC ZIP codes (10001–11697)
+<code>incident_zip</code>, then create new variable
+<code>zipcode</code>.</p></li>
+<li><p>Filtered to observations from 2019-01-01 to 2024-12-31.</p></li>
+<li><p>Removed records missing ZIP or geolocation (required for spatial
+EDA), and keep variables <code>longitude</code> and
+<code>latitude</code> for future <strong>Spatial
+Analysis</strong>.</p></li>
+<li><p>We were not interested in all variables of the raw dataset, so we
+selected for merged data:</p></li>
+</ul>
+<p><code>unique_key</code>: unique ID represents a single rat sighting
+report.</p>
+<p><code>created_date_only</code>: date of the complaint created without
+exact time.</p>
+<p><code>zipcode</code>: zip codes of the rat sighting complaints.</p>
+<p><code>year</code>: year of the rat sighting complaints.</p>
+<p><code>month</code>: month of the rat sighting complaints.</p>
+<p><code>latitude</code>: the latitude of the specific rat sighting.</p>
+<p><code>longitude</code>: the longitude of the specific rat
+sighting.</p>
+<pre class="r"><code>rat_agg_zip_month_full &lt;- rats_clean_2019_2024 |&gt;
+  group_by(zipcode, year, month) |&gt;
+  summarize(
+    rat_count_zip_month = n_distinct(unique_key),
+    .groups = &quot;drop&quot;
+  ) |&gt;
+  complete(
+    zipcode,
+    year,
+    month,
+    fill = list(rat_count_zip_month = 0)
+  )</code></pre>
+<p><strong>Aggregate Rat Sighting by zip x year x month</strong>, then
+create a new variable <code>rat_count_zip_month</code>: total numbers of
+rat sightings count of a specific zip by year by month.</p>
+<pre class="r"><code>inspections_clean &lt;- read_csv(
+  &quot;data/DOHMH_New_York_City_Restaurant_Inspection_Results.csv&quot;,
+  na = c(&quot;NA&quot;, &quot;&quot;, &quot;0&quot;)
+) |&gt;
+  clean_names() |&gt;
+  remove_empty(c(&quot;rows&quot;, &quot;cols&quot;)) |&gt;
+  
+  # Standardize ZIP and Dates
+  mutate(
+    zipcode = zipcode |&gt;
+      as.character() |&gt;
+      str_extract(&quot;\\d{5}&quot;) |&gt;   # ensure 5-digit format
+      str_pad(width = 5, pad = &quot;0&quot;),
+    date = mdy(inspection_date)
+  ) |&gt;
+  
+  # Filter valid records
+  filter(
+    !is.na(date),
+    date &gt;= as.Date(&quot;2019-01-01&quot;),
+    date &lt;= as.Date(&quot;2024-12-31&quot;),
+
+    !is.na(zipcode),
+    zipcode &gt;= &quot;10001&quot;,
+    zipcode &lt;= &quot;11697&quot;,
+
+    !is.na(latitude),
+    !is.na(longitude),
+    !is.na(boro),
+    !is.na(violation_code)   # keep only violation records
+  ) |&gt;
+  
+  # Select necessary variables
+  dplyr::select(
+    restaurant_id = camis,
+    dba,
+    borough = boro,
+    zipcode,
+    cuisine_description,
+    date,
+    action,
+    violation_code, violation_description, critical_flag,
+    score, grade, grade_date, record_date,
+    inspection_type,
+    latitude, longitude
+  ) |&gt;
+  
+  # Add Year and Month
+  mutate(
+    year = year(date),
+    month = month(date)
+  )</code></pre>
+</div>
+<div id="data-source-2" class="section level2">
+<h2>Data Source 2</h2>
+<p><strong><a
+href="https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/about_data">NYC
+Restaurant Inspection Result</a></strong>: We utilized the NYC
+Restaurant Inspection Results dataset obtained from NYC Open Data, which
+compiles sanitation inspection outcomes for food service establishments
+across New York City. The dataset contains restaurant-level violation
+records including location, inspection dates, cuisine type, violation
+codes, and inspection results issued by the Department of Health and
+Mental Hygiene (DOHMH). This dataset provides an indicator of
+environmental hygiene conditions that may influence rodent activity.</p>
+<p><strong>Data Pre-cleaning steps included:</strong> - Extracted valid
+5-digit NYC ZIP codes (10001–11697) <code>zipcode</code> and padded to
+valid 5-digit format.</p>
+<p>-Raw inspection dates <code>inspection_date</code> converted to
+standardized Date format. Extracted <code>year</code> and
+<code>month</code> for temporal trend analysis.</p>
+<ul>
+<li><p>Retained only observations with non-missing
+<code>violation_code</code>. Inspections showing “No violations
+observed” were excluded. Removed incomplete geographic records lacking
+<code>latitude</code>/<code>longitude</code> or borough values.</p></li>
+<li><p>We were not interested in all variables of the raw dataset, so we
+selected for merged data:</p></li>
+</ul>
+<p><code>restaurant_id</code>: unique ID of each restaurants.</p>
+<p><code>zipcode</code>: zip codes of restaurants.</p>
+<p><code>year</code>: year of the Restaurant Inspection and Violations
+Results.</p>
+<p><code>month</code>: month of the Restaurant Inspection and Violations
+Results.</p>
+<p><code>latitude</code>: the latitude of the Restaurants.</p>
+<p><code>longitude</code>: the longitude of the Restaurants.</p>
+<pre class="r"><code>restaurant_agg_zip_month_full &lt;- inspections_clean |&gt;
+  group_by(zipcode, year, month) |&gt;
+  summarise(
+    violation_count_zip_month = n(),
+    inspection_count_zip_month = n_distinct(restaurant_id, date),
+    .groups = &quot;drop&quot;
+  ) |&gt;
+ complete(
+    zipcode,
+    year  = 2019:2024,
+    month = 1:12,
+    fill = list(
+      violation_count_zip_month   = 0,
+      inspection_count_zip_month = 0
+    )
+  )</code></pre>
+<p><strong>Aggregate NYC Restaurant Inspection Results by zip x year x
+month</strong>, then create new variables:
+<code>violation_count_zip_month</code> (total number of recorded
+violations within each ZIP–year–month) and
+<code>inspection_count_zip_month</code>(total number of recorded
+inspections within each ZIP–year–month).</p>
+<pre class="r"><code>library(tidycensus)
+library(tidyverse)
+
+acs_zip_raw &lt;- get_acs(
+  geography = &quot;zip code tabulation area&quot;,
+  variables = c(
+    total_pop   = &quot;B01003_001&quot;,
+    pov_total   = &quot;B17001_001&quot;,
+    pov_count   = &quot;B17001_002&quot;,
+    med_income  = &quot;B19013_001&quot;
+  ),
+  year   = 2019,
+  survey = &quot;acs5&quot;,
+  geometry = FALSE
+)
+
+ses_zip &lt;- acs_zip_raw %&gt;%
+  select(GEOID, variable, estimate) %&gt;%
+  pivot_wider(
+    names_from  = variable,
+    values_from = estimate
+  ) %&gt;%
+  mutate(
+    zip = GEOID,
+    poverty_rate = pov_count / pov_total,
+    population_density = total_pop / 1000,
+    median_household_income = med_income / 1000
+  )
+
+ses_zip_nyc &lt;- ses_zip %&gt;%
+  mutate(zip_num = as.numeric(zip)) %&gt;%
+  filter(
+    !is.na(zip_num),
+    zip_num &gt;= 10001,
+    zip_num &lt;= 11697,
+    total_pop &gt; 0,
+    pov_total &gt; 0
+  ) %&gt;%
+  select(
+    zipcode  = zip_num,
+    total_pop,
+    poverty_rate,
+    population_density,
+    median_household_income
+  )</code></pre>
+</div>
+<div id="data-source-3" class="section level2">
+<h2>Data Source 3</h2>
+<p><strong>ACS 2019 5-year estimates</strong>: Area-level socioeconomic
+indicators were obtained from the 2015–2019 ACS 5-year estimates at the
+ZIP Code Tabulation Area (ZCTA) level using <em>tidycensus</em> in R.
+*Notice: We selected the 2015–2019 estimates because the 2019–2023 ACS
+data were affected by COVID-19-related disruptions and contained
+substantial missingness, while SES indicators remain relatively stable
+over time.</p>
+<p><strong>Data Pre-cleaning and preparation</strong>:</p>
+<ul>
+<li><p>Extracted valid 5-digit NYC ZIP codes (10001–11697)
+<code>zipcode</code> and padded to valid 5-digit format.</p></li>
+<li><p>We focused on variables that are most relevant to restaurant
+sanitation and the environmental conditions influencing rat
+activity:</p></li>
+</ul>
+<p><code>zipcode</code>: zipcodes of the NYC.</p>
+<p><code>total_pop</code>: total population of the specific zipcode.</p>
+<p><code>pov_count</code>: the subset of individuals living below the
+U.S. federal poverty threshold as defined by the ACS</p>
+<p><code>pov_total</code>: the total civilian population within the ZIP
+Code Tabulation Area eligible for poverty status determination</p>
+<p><code>med_income</code>:the midpoint of the household income
+distribution where 50% of households earn more and 50% earn less</p>
+<p>We also realized that counts describe size and may cause bias (For
+example, high rodent risk may still exist in smaller-population
+neighborhoods, and count-based socioeconomic metrics would underestimate
+such disparities.), but rates and densities describe risk and
+environment — which are what we want to study. Hence, we created new zip
+-level variables:</p>
+<p><span class="math inline">\(pov\_rate =
+\frac{pov\_count}{pov\_total}\)</span>: represents the proportion of
+residents living below the federal poverty threshold within each ZIP
+Code Tabulation Area</p>
+<p><span class="math inline">\(population\_density =
+\frac{total\_pop}{1000}\)</span>: expresses the concentration of
+residents per ZIP code, measured as total population per 1,000
+residents, serving as an indicator of urbanization and built environment
+crowding.</p>
+<p><span class="math inline">\(median\_household\_income =
+\frac{med\_income}{1000}\)</span>: reflects the neighborhood’s economic
+resource level. med_income denotes the ACS-estimated median household
+income in USD, scaled per $1,000 for interpretability in modeling and
+descriptive statistics.</p>
+<pre class="r"><code>rat_fixed &lt;- rat_agg_zip_month_full |&gt;
+  mutate(zipcode = as.character(zipcode))
+
+restaurant_fixed &lt;- restaurant_agg_zip_month_full |&gt;
+  mutate(zipcode = as.character(zipcode))
+
+ses_fixed &lt;- ses_zip_nyc |&gt;
+  mutate(zipcode = as.character(zipcode))
+
+common_zips &lt;- Reduce(
+  intersect,
+  list(
+    rat_fixed$zipcode,
+    restaurant_fixed$zipcode,
+    ses_fixed$zipcode
+  )
+)
+
+rat_filtered &lt;- rat_fixed |&gt;
+  filter(zipcode %in% common_zips)
+
+restaurant_filtered &lt;- restaurant_fixed |&gt;
+  filter(zipcode %in% common_zips)
+
+ses_filtered &lt;- ses_fixed |&gt;
+  filter(zipcode %in% common_zips)
+
+df_merged &lt;- rat_filtered |&gt;
+  inner_join(restaurant_filtered,
+             by = c(&quot;zipcode&quot;, &quot;year&quot;, &quot;month&quot;)) |&gt;
+  inner_join(ses_filtered,
+             by = &quot;zipcode&quot;)
+
+write_csv(df_merged, &quot;./data/zip_year_month_merged.csv&quot;)</code></pre>
+</div>
+<div id="merge-3-datasets-by-zipcode-x-year-x-month"
+class="section level2">
+<h2>Merge 3 datasets by zipcode x year x month</h2>
+<p>In the merged dataset, we included variables: <code>zipcode</code>,
+<code>year</code>, <code>month</code>, <code>rat_count_zip_month</code>,
+<code>violation_count_zip_month</code>,
+<code>inspection_count_zip_month</code>, <code>total_pop</code>,
+<code>poverty_rate</code>, <code>population_density</code>.</p>
+</div>
+<div id="export" class="section level2">
+<h2>Export</h2>
+<p>We exported the merged dataset as csv file zip_year_month_merged.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
