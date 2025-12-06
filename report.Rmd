@@ -1177,6 +1177,38 @@ model1_results <- tidy(model1, exponentiate = TRUE, conf.int = TRUE) |>
 kable(model1_results)
 ```
 
+
+```{r, message = FALSE, warning = FALSE}
+
+new_df <- data.frame(
+  violation_rate = seq(
+    min(df_model$violation_rate),
+    max(df_model$violation_rate),
+    length.out = 100)
+)
+
+pred <- predict(model1, newdata = new_df,
+                type = "response", se.fit = TRUE)
+
+new_df <- new_df |> 
+  mutate(
+    fit = pred$fit,
+    lower = fit - 1.96 * pred$se.fit,
+    upper = fit + 1.96 * pred$se.fit
+  )
+
+ggplot(new_df, aes(x = violation_rate, y = fit)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+  labs(
+    title = "Predicted Rat Sightings by Violation Rate",
+    x = "Restaurant Violation Rate",
+    y = "Predicted Rat Sightings (per ZIP per Month)"
+  ) +
+  theme_minimal()
+
+```
+
 In Model 1, the incidence rate ratio (IRR) for violation rate is 1.134 (95% CI: 1.121–1.147, p < 0.001), which means that at 5% significant level, every 1-unit in `violation_rate` increasing, rat sightings increase by 13.4% on average.  
 
 Higher restaurant violation rates are associated with substantial increases in rat sightings, indicating that deteriorating sanitation environments may contribute to rat infestations. However, Model 1 does not control for other covariates, and may not overestimate the associaiton. 
@@ -1217,6 +1249,41 @@ model2_results <- tidy(model2, exponentiate = TRUE, conf.int = TRUE) |>
   )
 
 kable(model2_results)
+```
+
+```{r, message = FALSE, warning = FALSE}
+
+new_df2 <- data.frame(
+  violation_rate = seq(
+    min(df_model$violation_rate),
+    max(df_model$violation_rate),
+    length.out = 100
+  ),
+  population_density = mean(df_model$population_density, na.rm = TRUE),
+  poverty_rate = mean(df_model$poverty_rate, na.rm = TRUE)
+)
+
+pred2 <- predict(model2, newdata = new_df2, 
+                 type = "response", se.fit = TRUE)
+
+new_df2 <- new_df2 |>
+  mutate(
+    fit = pred2$fit,
+    lower = fit - 1.96 * pred2$se.fit,
+    upper = fit + 1.96 * pred2$se.fit
+  )
+
+ggplot(new_df2, aes(x = violation_rate, y = fit)) +
+  geom_line(size = 1.1) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+  labs(
+    title = "Adjusted Predicted Rat Sightings by Restaurant Violation Rate",
+    subtitle = "Model adjusted for population density and poverty rate",
+    x = "Restaurant Violation Rate",
+    y = "Predicted Rat Sightings"
+  ) +
+  theme_minimal()
+
 ```
 
 In Model 2, the incidence rate ratio (IRR) for violation rate decreased (1.108) (95% CI: 1.098–1.119, p < 0.001), which means that at 5% significant level, every 1-unit in `violation_rate` increasing, rat sightings increase by 11.08% on average, adjusted by `population_density` and `poverty_rate`. 
@@ -1266,6 +1333,44 @@ model3_results <- tidy(model3, exponentiate = TRUE, conf.int = TRUE) |>
 kable(model3_results)
 ```
 
+```{r, message = FALSE, warning = FALSE}
+
+new_df3 <- data.frame(
+  violation_rate = seq(
+    min(df_model$violation_rate),
+    max(df_model$violation_rate),
+    length.out = 100
+  ),
+  population_density = mean(df_model$population_density, na.rm = TRUE),
+  poverty_rate = mean(df_model$poverty_rate, na.rm = TRUE),
+  year = "2022",  
+  month = "6"      
+)
+
+pred3 <- predict(model3, newdata = new_df3, 
+                 type = "response", se.fit = TRUE)
+
+new_df3 <- new_df3 |>
+  mutate(
+    fit = pred3$fit,
+    lower = fit - 1.96 * pred3$se.fit,
+    upper = fit + 1.96 * pred3$se.fit
+  )
+
+ggplot(new_df3, aes(x = violation_rate, y = fit)) +
+  geom_line(size = 1.1) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.15) +
+  labs(
+    title = "Fully Adjusted Model",
+    subtitle = "Predicted Rat Sightings by Violation Rate\nAdjusted for population density, poverty rate, year & month",
+    x = "Restaurant Violation Rate",
+    y = "Predicted Rat Sightings"
+  ) +
+  theme_minimal()
+
+```
+
+
 In Model 3, the incidence rate ratio (IRR) for violation rate is 1.086 (95% CI: 1.071–1.102, p < 0.001), which means that at 5% significant level, every 1-unit in `violation_rate` increasing, rat sightings increase by 10.71% on average, adjusted by `population_density`, `poverty_rate`, `year`, `month`.
 
 After adjusting for `month` and `year` fixed effects, the association between violation rate and rat sightings remained statistically significant, though slightly attenuated (IRR ≈ 1.086).
@@ -1309,6 +1414,43 @@ model4_results <- tidy(model4, exponentiate = TRUE, conf.int = TRUE) |>
   )
 
 kable(model4_results)
+```
+
+```{r, message = FALSE, warning = FALSE}
+
+new_df4 <- data.frame(
+  lag_violation_rate = seq(
+    min(df_model$lag_violation_rate),
+    max(df_model$lag_violation_rate),
+    length.out = 100
+  ),
+  population_density = mean(df_model$population_density, na.rm = TRUE),
+  poverty_rate = mean(df_model$poverty_rate, na.rm = TRUE),
+  year = "2022",
+  month = "6"
+)
+
+pred4 <- predict(model4, newdata = new_df4, 
+                 type = "response", se.fit = TRUE)
+
+new_df4 <- new_df4 |>
+  mutate(
+    fit = pred4$fit,
+    lower = fit - 1.96 * pred4$se.fit,
+    upper = fit + 1.96 * pred4$se.fit
+  )
+
+ggplot(new_df4, aes(x = lag_violation_rate, y = fit)) +
+  geom_line(size = 1.1) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.15) +
+  labs(
+    title = "Lagged Model: Predicted Rat Sightings by Violation Rate (1-month lag)",
+    subtitle = "Adjusted for SES, year and month",
+    x = "Lagged Restaurant Violation Rate (previous month)",
+    y = "Predicted Rat Sightings"
+  ) +
+  theme_minimal()
+
 ```
 
 In Model 4, the incidence rate ratio (IRR) for lag violation rate is 1.086 (95% CI: 1.070–1.102, p < 0.001), which means that at 5% significant level, every 1-unit in `violation_rate` increasing, rat sightings increase by 10.86% on average, adjusted by `population_density`, `poverty_rate`, `year`, `month`.

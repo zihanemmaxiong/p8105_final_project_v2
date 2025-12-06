@@ -356,7 +356,13 @@ div.tocify {
   <a href="interactive_map.html">Interactive Map</a>
 </li>
 <li>
-  <a href="https://github.com/zihanemmaxiong/p8105_final_project_v1.git">
+  <a href="https://youtu.be/2_Qcc_IW_dY">
+    <span class="fa fa-play-circle fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://github.com/zihanemmaxiong/p8105_final_project_v2">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -587,6 +593,33 @@ kable(model1_results)</code></pre>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>new_df &lt;- data.frame(
+  violation_rate = seq(
+    min(df_model$violation_rate),
+    max(df_model$violation_rate),
+    length.out = 100)
+)
+
+pred &lt;- predict(model1, newdata = new_df,
+                type = &quot;response&quot;, se.fit = TRUE)
+
+new_df &lt;- new_df |&gt; 
+  mutate(
+    fit = pred$fit,
+    lower = fit - 1.96 * pred$se.fit,
+    upper = fit + 1.96 * pred$se.fit
+  )
+
+ggplot(new_df, aes(x = violation_rate, y = fit)) +
+  geom_line(size = 1) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+  labs(
+    title = &quot;Predicted Rat Sightings by Violation Rate&quot;,
+    x = &quot;Restaurant Violation Rate&quot;,
+    y = &quot;Predicted Rat Sightings (per ZIP per Month)&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="modelling_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>In Model 1, the incidence rate ratio (IRR) for violation rate is
 1.134 (95% CI: 1.121–1.147, p &lt; 0.001), which means that at 5%
 significant level, every 1-unit in <code>violation_rate</code>
@@ -690,6 +723,37 @@ kable(model2_results)</code></pre>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>new_df2 &lt;- data.frame(
+  violation_rate = seq(
+    min(df_model$violation_rate),
+    max(df_model$violation_rate),
+    length.out = 100
+  ),
+  population_density = mean(df_model$population_density, na.rm = TRUE),
+  poverty_rate = mean(df_model$poverty_rate, na.rm = TRUE)
+)
+
+pred2 &lt;- predict(model2, newdata = new_df2, 
+                 type = &quot;response&quot;, se.fit = TRUE)
+
+new_df2 &lt;- new_df2 |&gt;
+  mutate(
+    fit = pred2$fit,
+    lower = fit - 1.96 * pred2$se.fit,
+    upper = fit + 1.96 * pred2$se.fit
+  )
+
+ggplot(new_df2, aes(x = violation_rate, y = fit)) +
+  geom_line(size = 1.1) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.2) +
+  labs(
+    title = &quot;Adjusted Predicted Rat Sightings by Restaurant Violation Rate&quot;,
+    subtitle = &quot;Model adjusted for population density and poverty rate&quot;,
+    x = &quot;Restaurant Violation Rate&quot;,
+    y = &quot;Predicted Rat Sightings&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="modelling_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>In Model 2, the incidence rate ratio (IRR) for violation rate
 decreased (1.108) (95% CI: 1.098–1.119, p &lt; 0.001), which means that
 at 5% significant level, every 1-unit in <code>violation_rate</code>
@@ -945,6 +1009,39 @@ kable(model3_results)</code></pre>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>new_df3 &lt;- data.frame(
+  violation_rate = seq(
+    min(df_model$violation_rate),
+    max(df_model$violation_rate),
+    length.out = 100
+  ),
+  population_density = mean(df_model$population_density, na.rm = TRUE),
+  poverty_rate = mean(df_model$poverty_rate, na.rm = TRUE),
+  year = &quot;2022&quot;,  
+  month = &quot;6&quot;      
+)
+
+pred3 &lt;- predict(model3, newdata = new_df3, 
+                 type = &quot;response&quot;, se.fit = TRUE)
+
+new_df3 &lt;- new_df3 |&gt;
+  mutate(
+    fit = pred3$fit,
+    lower = fit - 1.96 * pred3$se.fit,
+    upper = fit + 1.96 * pred3$se.fit
+  )
+
+ggplot(new_df3, aes(x = violation_rate, y = fit)) +
+  geom_line(size = 1.1) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.15) +
+  labs(
+    title = &quot;Fully Adjusted Model&quot;,
+    subtitle = &quot;Predicted Rat Sightings by Violation Rate\nAdjusted for population density, poverty rate, year &amp; month&quot;,
+    x = &quot;Restaurant Violation Rate&quot;,
+    y = &quot;Predicted Rat Sightings&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="modelling_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p>In Model 3, the incidence rate ratio (IRR) for violation rate is
 1.086 (95% CI: 1.071–1.102, p &lt; 0.001), which means that at 5%
 significant level, every 1-unit in <code>violation_rate</code>
@@ -1204,6 +1301,39 @@ kable(model4_results)</code></pre>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>new_df4 &lt;- data.frame(
+  lag_violation_rate = seq(
+    min(df_model$lag_violation_rate),
+    max(df_model$lag_violation_rate),
+    length.out = 100
+  ),
+  population_density = mean(df_model$population_density, na.rm = TRUE),
+  poverty_rate = mean(df_model$poverty_rate, na.rm = TRUE),
+  year = &quot;2022&quot;,
+  month = &quot;6&quot;
+)
+
+pred4 &lt;- predict(model4, newdata = new_df4, 
+                 type = &quot;response&quot;, se.fit = TRUE)
+
+new_df4 &lt;- new_df4 |&gt;
+  mutate(
+    fit = pred4$fit,
+    lower = fit - 1.96 * pred4$se.fit,
+    upper = fit + 1.96 * pred4$se.fit
+  )
+
+ggplot(new_df4, aes(x = lag_violation_rate, y = fit)) +
+  geom_line(size = 1.1) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.15) +
+  labs(
+    title = &quot;Lagged Model: Predicted Rat Sightings by Violation Rate (1-month lag)&quot;,
+    subtitle = &quot;Adjusted for SES, year and month&quot;,
+    x = &quot;Lagged Restaurant Violation Rate (previous month)&quot;,
+    y = &quot;Predicted Rat Sightings&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="modelling_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <p>In Model 4, the incidence rate ratio (IRR) for lag violation rate is
 1.086 (95% CI: 1.070–1.102, p &lt; 0.001), which means that at 5%
 significant level, every 1-unit in <code>violation_rate</code>
@@ -1286,7 +1416,7 @@ risk.</p>
     y=&quot;RMSE&quot;,
     title=&quot;Cross-Validation Performance: RMSE&quot;
   )</code></pre>
-<p><img src="modelling_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="modelling_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 </div>
 </div>
 
