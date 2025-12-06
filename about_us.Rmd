@@ -1,0 +1,108 @@
+---
+title: "About"
+output: 
+  html_document:
+    theme: flatly
+    toc: true
+    code_folding: hide
+    toc_float: true
+---
+<style>
+body {
+  color: #382320 !important;    
+}
+
+h1, h2, h3, h4, h5 {
+  color: #382320 !important;   
+}
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Kranky&display=swap" rel="stylesheet">
+
+<style>
+
+body {
+  background-image: url("images/About_background.png");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.body-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 190%;
+  height: 130%;
+  background: rgba(255,255,255,0.1);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.main-container {
+  background: rgba(255,255,255,0.75);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.rat-title {
+  font-family: 'Kranky', cursive;
+  font-size: 46px;
+  font-weight: 400;
+  color: #333333;
+  letter-spacing: 1px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+
+</style>
+
+
+
+
+<style>
+.team-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.team-photo {
+  width: 120px;         
+  height: 120px;
+  border-radius: 50%;     
+  object-fit: cover;     
+  margin-right: 22px;
+  border: none;          
+}
+
+.team-name {
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+}
+</style>
+
+<h1 class="rat-title">Meet Our Team</h1>
+
+<div class="team-row">
+  <img src="images/About_Rat1.jpg" class="team-photo"/>
+  <div class="team-name">Zihan Xiong (zx2527)</div>
+</div>
+
+<div class="team-row">
+  <img src="images/About_Rat2.jpg" class="team-photo"/>
+  <div class="team-name">Wanting Dong (wd2311)</div>
+</div>
+
+<div class="team-row">
+  <img src="images/About_Rat3.jpg" class="team-photo"/>
+  <div class="team-name">Hsuanyi Lee (hl3858)</div>
+</div>
+
+<div class="team-row">
+  <img src="images/About_Rat4.jpg" class="team-photo"/>
+  <div class="team-name">Yue Hu (yh3823)</div>
+  
+</div>
