@@ -1,0 +1,30 @@
+/* Navigation background color */
+.navbar {
+  background-color: #FFFFF9 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Navigation text*/
+.navbar-nav > li > a {
+  color: #333333 !important;           
+  font-weight: 800 !important;          
+  font-size: 17px !important;
+  background: none !important;
+  border-bottom: 3px solid transparent; 
+  padding-bottom: 10px !important;
+}
+
+/* Underscore*/
+.navbar-nav > li > a:hover {
+  color: #332B26 !important;
+  border-bottom: 3px solid #382320 !important;
+}
+
+.navbar-nav > .active > a,
+.navbar-nav > .active > a:focus,
+.navbar-nav > .active > a:hover {
+  color: #332B26 !important;
+  border-bottom: 3px solid #382320 !important;
+  background: none !important;
+}
