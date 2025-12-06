@@ -1,0 +1,152 @@
+---
+title: "Home"
+output: 
+  html_document:
+    theme: flatly
+    toc: true
+    code_folding: hide
+    toc_float: true
+---
+<style>
+body {
+  color: #382320 !important;    
+}
+
+h1, h2, h3, h4, h5 {
+  color: #382320 !important;    
+}
+</style>
+
+
+<div class="body-overlay"></div>
+
+<div class="main-container">
+
+<link href="https://fonts.googleapis.com/css2?family=Kranky&display=swap" rel="stylesheet">
+
+<style>
+.rat-title {
+  font-family: 'Kranky', cursive;
+  font-size: 46px;          
+  font-weight: 400;
+  color: #333333;
+  letter-spacing: 1px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+</style>
+
+<style>
+.footer-rat-banner { }
+</style>
+
+<style>
+body {
+  background-image: url("images/Home_rat.jpg");
+  background-size: cover;         
+  background-attachment: fixed;   
+  background-position: center; 
+  background-repeat: no-repeat;
+  opacity: 1;
+}
+
+.body-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 190%;    
+  height: 120%;   
+  background: rgba(255,255,255,0); 
+  z-index: -1;    
+  pointer-events: none;
+}
+
+.main-container {
+  background: rgba(255,255,255,0.75);
+  padding: 20px;
+  border-radius: 12px;
+}
+</style>
+
+<h1 class="rat-title">
+Meet the Rat Residents of NYC: Where They Live, Dine, and Wander
+</h1>
+
+<br>
+
+## Exploring How Urban Life Shapes Rat Activity
+
+New York City is famous for many things: Bagels 🥯, Broadway 💃, and… unfortunately, rats. 🐭💨 Every day, thousands of residents report sightings through 311, while health inspectors visit restaurants across all five boroughs. With so much movement both above and below ground, we began to wonder:
+
+- **Do NYC rats have "favorite" neighborhoods?**
+- **Do rat sightings rise and fall with the seasons?**
+- **Are they linked to restaurant sanitation problems?**
+
+Our project breaks down these questions using three major datasets: rat sightings, restaurant inspections, and neighborhood-level socioeconomic indicators to understand how environment, time, and human activity contribute to NYC\'s rat problem. Together, these insights reveal not just where rats appear, but why. 
+
+---
+
+## Data Sources
+
+We brought together three complementary NYC datasets covering 2019–2024.
+
+### 1. Rat Sightings (NYC 311)
+Citizen-reported rat complaints, including time and exact location.  
+Reports submitted by residents when they see rats, including timestamps and precise locations. These data help us track when rat activity peaks and which areas experience the heaviest burden.
+
+### 2. Restaurant Inspection Results (DOHMH)
+Official health inspection outcomes and recorded sanitation violations for food establishments. This allows us to examine how neighborhood hygiene and food safety relate to patterns of rat sightings.
+
+### 3. ACS Neighborhood Indicators
+ZIP-code–level information on socioeconomic and demographic characteristics. These measures provide essential context for understanding why rat-related issues may be more concentrated in some communities than others.
+
+*If you want to dig into how we cleaned and merged these datasets, visit our [Data page](Data.html).*
+
+---
+
+## Dive Into NYC\'s Rat Landscape
+
+NYC rats don’t just show up randomly. Their activity shifts with the weather, the layout of different neighborhoods, and the way people live and move through the city. Our exploratory analysis examines where rats tend to gather, how their numbers rise and fall across seasons, and how these patterns relate to restaurant sanitation and broader community characteristics. In our Exploratory Data Analysis we uncover:
+
+### 📍 Spatial Patterns
+- Where are rat hotspots across the city?
+- Do they overlap with areas that also perform poorly on restaurant inspections?
+- *Interactive maps let you explore how sanitation and rat activity cluster across neighborhoods.*
+
+### 📅 Seasonal and Long-Term Trends
+- Do rats surge in summer?
+- Did COVID-19 shutdowns reduce sightings?
+- *Our time-series visualizations reveal how rat activity rises and falls throughout the year and across major events.*
+
+### 🏙️ Environment & Neighborhood Factors
+- Do high-density neighborhoods see more rats?
+- How does poverty relate to inspection outcomes?
+- *We explore how social and structural factors shape NYC\'s urban ecology.*
+
+---
+
+## Why This Project Matters
+
+Rats in New York are more than just a common annoyance. They’re connected to bigger public health issues involving sanitation, infrastructure, and neighborhood conditions. In this project, we bring together 311 rat reports, restaurant inspection records, and community-level data to understand how these pieces fit together across the city. This combined view helps us see where rats and sanitation problems overlap and how seasons, daily routines, and local environments shape rat activity. We also hope these findings can support more focused and effective public health efforts.
+
+---
+
+## Screencast
+
+---
+
+#### [GitHub Repository](https://github.com/zihanemmaxiong/p8105_final_project_v1)
+
+
+<img src="images/Home9.png"
+     style="
+        position: fixed;
+        bottom: 0;
+        left: 20px;
+        width: 350px;    
+        height: auto;
+        z-index: 999999; 
+        pointer-events: none; 
+     ">
+     
+ </div>
