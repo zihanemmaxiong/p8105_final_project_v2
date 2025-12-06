@@ -1,0 +1,82 @@
+---
+title: "Discussion"
+output: 
+  html_document:
+    theme: flatly
+    toc: true
+    toc_float: true
+---
+<style>
+body {
+  color: #382320 !important;    
+}
+
+h1, h2, h3, h4, h5 {
+  color: #382320 !important;     
+}
+</style>
+
+<div class="body-overlay"></div>
+
+<div class="main-container">
+
+<link href="https://fonts.googleapis.com/css2?family=Kranky&display=swap" rel="stylesheet">
+
+<style>
+.rat-title {
+  font-family: 'Kranky', cursive;
+  font-size: 46px;
+  font-weight: 400;
+  color: #333333;
+  letter-spacing: 1px;
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+</style>
+
+<style>
+body {
+  background-image: url("images/proposal_bg.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+}
+
+.body-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 190%;    
+  height: 120%;   
+  background: rgba(255,255,255,0.05); 
+  z-index: -1;    
+  pointer-events: none;
+}
+
+.main-container {
+  background: rgba(255,255,255,0.75);
+  padding: 20px;
+  border-radius: 12px;
+}
+</style>
+
+
+<h1 class="rat-title">Discussion</h1>
+
+---
+
+In this study, we integrated New York City rat sighting reports with restaurant inspection results to investigate the potential association between neighborhood-level restaurant sanitation and rat activity. Our results indicate that monthly rat sightings exhibit a clear seasonal pattern—peaking in warmer months—and show a sustained upward trend in the post-pandemic period. In contrast, restaurant violation rates remain relatively stable over time with smaller fluctuations. This suggests that restaurant sanitation likely represents only one contributing risk component.
+
+Moreover, we observed that the spatial distributions of rat sightings and restaurant violation rates only partially overlap. Some neighborhoods experience high violation rates without the highest rat activity, while others show substantial rat problems despite relatively low violation rates. These findings suggest that rat infestations are shaped by a more complex interplay of factors—such as population density, poverty burden, aging housing stock, and urban infrastructure—beyond restaurant sanitation alone. In addition, the detection of clear hotspot clusters indicates potential spatial spillover of environmental health risks across neighboring ZIP codes.
+
+Further modeling analyses revealed that the best model - lagged (one-month) restaurant violation rate is a statistically significant predictor of rat sightings. This supports a plausible mechanism: poorer sanitation and improper waste handling in restaurants may create more favorable food and habitat conditions for rats, leading to increased activity and sightings in the following month. Additionally, socioeconomic characteristics—such as neighborhood poverty levels and population density—were also significantly associated with rat activity, indicating underlying structural disparities across communities. These findings highlight that rat problems are closely tied not only to local sanitation management but also to broader dimensions of urban infrastructure and public health equity.
+
+The temporal and spatial disparities revealed in this study provide important guidance for urban rodent control strategies. First, the sharp seasonal rise in rat activity during summer suggests that the city should reinforce waste management and inspection efforts in advance of high-risk months, particularly within hotspot ZIP codes. Second, the observed lagged association between restaurant violation rates and rat sightings highlights the value of coordinated environmental health governance—strengthening food sanitation enforcement and improving waste handling practices may help reduce subsequent rodent exposure risks. Furthermore, the socioeconomic patterns observed indicate that rat burdens are disproportionately concentrated in resource-limited communities, underscoring the need to incorporate health equity considerations into municipal pest-control planning.
+
+## Limitations
+
+Despite these meaningful insights, several limitations should be acknowledged. Rat sighting data rely on resident reporting, which may be influenced by behavioral factors such as pandemic-related activity changes or differential awareness across communities, introducing potential reporting bias. In addition, considering of complexicity of this study, violation rate reflects sanitation only at the restaurant level and does not account for broader environmental determinants such as street garbage systems, building age and maintenance, underground infrastructure, or transit corridors, limiting the strength of causal interpretations. Finally, while ZIP–Month aggregation facilitates spatio-temporal modeling, it may mask finer-scale variation; future work could leverage more granular geographic units to refine environmental risk assessment.
+
+</div>
