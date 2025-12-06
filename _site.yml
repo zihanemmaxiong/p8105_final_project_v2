@@ -24,7 +24,7 @@ navbar:
     - icon: fa-play-circle fa-lg
       href: https://youtu.be/2_Qcc_IW_dY
     - icon: fa-github fa-lg
-      href: https://github.com/zihanemmaxiong/p8105_final_project_v2.git
+      href: https://github.com/zihanemmaxiong/p8105_final_project_v2
 
 
 output:
