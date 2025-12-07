@@ -20,7 +20,7 @@ navbar:
     - text: "Discussion"
       href: discussion.html
     - text: "Interactive Map"
-      href: interactive_map.html
+      href: https://zihanxiong.shinyapps.io/p8105_final_project_v2/
     - icon: fa-play-circle fa-lg
       href: https://youtu.be/2_Qcc_IW_dY
     - icon: fa-github fa-lg

@@ -1,5 +1,5 @@
 ---
-title: "report"
+title: "Report"
 output: 
   html_document:
     theme: flatly
