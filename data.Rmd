@@ -377,7 +377,7 @@ ses_zip_nyc <- ses_zip %>%
 
 We also realized that counts describe size and may cause bias (For example, high rodent risk may still exist in smaller-population neighborhoods, and count-based socioeconomic metrics would underestimate such disparities.), but rates and densities describe risk and environment — which are what we want to study. Hence, we created new zip -level variables: 
 
-$pov\_rate = \frac{pov\_count}{pov\_total}$: represents the proportion of residents living below the federal poverty threshold within each ZIP Code Tabulation Area
+$poverty\_rate = \frac{pov\_count}{pov\_total}$: represents the proportion of residents living below the federal poverty threshold within each ZIP Code Tabulation Area
 
 $population\_density = \frac{total\_pop}{1000}$: expresses the concentration of residents per ZIP code, measured as total population per 1,000 residents, serving as an indicator of urbanization and built environment crowding.
 
@@ -421,7 +421,7 @@ write_csv(df_merged, "./data/zip_year_month_merged.csv")
 ```
 
 ## Merge 3 datasets by zipcode x year x month
-In the merged dataset, we included variables: `zipcode`, `year`, `month`, `rat_count_zip_month`, `violation_count_zip_month`, `inspection_count_zip_month`, `total_pop`, `poverty_rate`, `population_density`. 
+In the merged dataset, we included variables: `zipcode`, `year`, `month`, `rat_count_zip_month`, `violation_count_zip_month`, `inspection_count_zip_month`, `total_pop`, `poverty_rate`, `population_density` and `median_household_income`. 
 
 ## Export
 We exported the merged dataset as csv file zip_year_month_merged.

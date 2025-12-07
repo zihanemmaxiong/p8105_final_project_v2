@@ -212,7 +212,7 @@ ggplot(new_df, aes(x = violation_rate, y = fit)) +
 
 In Model 1, the incidence rate ratio (IRR) for violation rate is 1.134 (95% CI: 1.121–1.147, p < 0.001), which means that at 5% significant level, every 1-unit in `violation_rate` increasing, rat sightings increase by 13.4% on average.  
 
-Higher restaurant violation rates are associated with substantial increases in rat sightings, indicating that deteriorating sanitation environments may contribute to rat infestations. However, Model 1 does not control for other covariates, and may not overestimate the associaiton. 
+Higher restaurant violation rates are associated with substantial increases in rat sightings, indicating that deteriorating sanitation environments may contribute to rat infestations. However, Model 1 does not control for other covariates, and may overestimate the associaiton. 
 
 ### Model 2 - SES - Adjusted
 
