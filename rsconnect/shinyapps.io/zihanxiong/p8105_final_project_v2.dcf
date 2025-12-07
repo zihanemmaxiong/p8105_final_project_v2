@@ -1,0 +1,13 @@
+name: p8105_final_project_v2
+title: p8105_final_project_v2
+username: zihanxiong
+account: zihanxiong
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16257659
+bundleId: 11285678
+url: https://zihanxiong.shinyapps.io/p8105_final_project_v2/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: _site.yml|.gitattributes|about_us.html|about_us.Rmd|data/DOHMH_New_York_City_Restaurant_Inspection_Results.csv|data/Rat_Sightings_20251106.csv|data/ses_zipcode_acs2019.csv|data.html|data.Rmd|discussion.html|discussion.Rmd|eda.html|eda.Rmd|index.html|index.rmd|interactive_map.Rmd|modelling_files/figure-html/unnamed-chunk-10-1.png|modelling_files/figure-html/unnamed-chunk-14-1.png|modelling_files/figure-html/unnamed-chunk-4-1.png|modelling_files/figure-html/unnamed-chunk-6-1.png|modelling_files/figure-html/unnamed-chunk-8-1.png|modelling.html|modelling.rmd|proposal.html|proposal.Rmd|README.md|report.html|report.Rmd|styles.css|eda_files|images|report_files|site_libs
