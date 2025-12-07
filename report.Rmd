@@ -614,8 +614,8 @@ rats_lisa_df <- as.data.frame(rats_lisa)
 
 ny_zip_sf <- ny_zip_sf |>
   dplyr::mutate(
-    rats_I    = rats_lisa_df$Ii,          # 第 1 列
-    rats_p    = rats_lisa_df[[ncol(rats_lisa_df)]],  # 最后一列，通常是 p-value
+    rats_I    = rats_lisa_df$Ii,          
+    rats_p    = rats_lisa_df[[ncol(rats_lisa_df)]],  
     rats_mean = mean(rats_per_10000, na.rm = TRUE),
     rats_centered = rats_per_10000 - rats_mean,
     rats_lag  = spdep::lag.listw(lw, rats_per_10000, zero.policy = TRUE),
@@ -699,6 +699,17 @@ ggplot2::ggplot(ny_zip_sf, ggplot2::aes(fill = viol_quad)) +
   ) +
   ggplot2::theme_minimal()
 ```
+
+Please see our interactive map: 
+
+<iframe 
+  src="https://zihanxiong.shinyapps.io/p8105_final_project_v2/" 
+  width="100%" 
+  height="700px" 
+  frameborder="0" 
+  style="border: 1px solid #ccc; border-radius: 5px;"
+  title="Interactive EDA Shiny Application">
+</iframe>
 
 ## Bivariate Hotspots for Rats Sighting and Violations
 ### Rat Sightings per 10,000 × Violations per Restaurant
