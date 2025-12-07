@@ -17,7 +17,7 @@ zip_year_month <- readr::read_csv("data/zip_year_month_merged.csv") |>
     zipcode = stringr::str_pad(zipcode, width = 5, pad = "0")
   )
 
-# 0.2 按 zipcode × year 聚合到“年”级别
+
 zip_year <- zip_year_month |>
   dplyr::group_by(zipcode, year) |>
   dplyr::summarise(
@@ -43,13 +43,13 @@ zip_year <- zip_year_month |>
       NA_real_
     )
   ) |>
-  # 改成后面 Shiny 里统一用的列名
+
   dplyr::rename(
     rats_per_10000 = rats_per_10000_year,
     viol_per_rest  = viol_per_rest_year
   )
 
-# 0.3 获取 NY ZCTA polygon（ZIP 边界）
+
 ny_zcta <- tigris::zctas(state = "NY", year = 2010) |>
   dplyr::rename(zipcode = ZCTA5CE10) |>
   dplyr::mutate(
@@ -57,7 +57,7 @@ ny_zcta <- tigris::zctas(state = "NY", year = 2010) |>
     zipcode = stringr::str_pad(zipcode, width = 5, pad = "0")
   )
 
-# 0.4 合并成 ZIP × 年 的 sf 对象，并做 3×3 分类
+
 ny_zip_year_sf <- ny_zcta |>
   dplyr::left_join(zip_year, by = "zipcode") |>
   dplyr::filter(!is.na(year), year >= 2019, year <= 2024) |>
@@ -71,10 +71,10 @@ ny_zip_year_sf <- ny_zcta |>
     )
   )
 
-# 0.5 转成 WGS84 方便 leaflet（经纬度）
+
 ny_zip_year_leaf <- sf::st_transform(ny_zip_year_sf, 4326)
 
-# 0.6 3×3 cividis palette（和 5.7 保持一致）
+
 biv_cols <- viridisLite::viridis(9, option = "cividis")
 names(biv_cols) <- c(
   "V1R1","V2R1","V3R1",
@@ -82,7 +82,7 @@ names(biv_cols) <- c(
   "V1R3","V2R3","V3R3"
 )
 
-# 构造 3×3 legend：横轴 Violations (Low→High)，纵轴 Rats (Low→High，向上)
+
 biv_mat_codes <- matrix(
   c("V1R3","V2R3","V3R3",
     "V1R2","V2R2","V3R2",
@@ -100,7 +100,7 @@ legend_html <- htmltools::tags$div(
   ),
   htmltools::tags$table(
     style = "border-collapse: collapse; font-size: 11px;",
-    # 第一行：横轴标题（Violations）
+    
     htmltools::tags$tr(
       htmltools::tags$td(style = "padding-right: 4px;"),  # 左上角空白
       lapply(c("Low","Med","High"), function(x)
@@ -109,7 +109,7 @@ legend_html <- htmltools::tags$div(
           x
         ))
     ),
-    # 三行颜色格 + 纵轴标签（Rats: High, Med, Low）
+    
     lapply(1:3, function(i) {
       htmltools::tags$tr(
         htmltools::tags$td(
@@ -133,7 +133,7 @@ legend_html <- as.character(legend_html)
 
 
 
-# app.R (UI 部分) -------------------------------------------------------------
+# app.R -------------------------------------------------------------
 
 ui <- shiny::fluidPage(
   titlePanel("Interactive Map: Rat Sightings × Violations (ZIP × Year)"),
@@ -173,7 +173,7 @@ ui <- shiny::fluidPage(
 
 
 
-# app.R (Server 部分) ---------------------------------------------------------
+# app.R ---------------------------------------------------------
 server <- function(input, output, session) {
   
   ## palettes for continuous & bivariate
@@ -193,20 +193,20 @@ server <- function(input, output, session) {
     na.color = "transparent"
   )
   
-  ## 按年份过滤数据
+  
   filtered_data <- reactive({
     ny_zip_year_leaf |>
       dplyr::filter(year == input$year)
   })
   
-  ## 初始底图
+  
   output$map <- renderLeaflet({
     leaflet() |>
       addProviderTiles(providers$CartoDB.Positron) |>
       setView(lng = -73.94, lat = 40.72, zoom = 10)
   })
   
-  ## 根据选择的填色变量更新 polygon + legend
+  
   observe({
     dat <- filtered_data()
     if (nrow(dat) == 0) return()
@@ -243,11 +243,11 @@ server <- function(input, output, session) {
         )
       )
     
-    # 连续变量用默认 legend；双变量用 3×3 方块 legend
+    
     if (input$fill_var == "bi") {
       map_proxy |>
         addControl(
-          html     = legend_html,   # 前面定义好的 3×3 legend_html
+          html     = legend_html,   
           position = "bottomright"
         )
     } else {
@@ -262,7 +262,7 @@ server <- function(input, output, session) {
     }
   })
   
-  ## 点击 polygon 后显示信息
+
   observeEvent(input$map_shape_click, {
     click <- input$map_shape_click
     dat   <- filtered_data()
@@ -290,6 +290,6 @@ server <- function(input, output, session) {
 
 
 
-# app.R (启动) ----------------------------------------------------------------
+# app.R  ----------------------------------------------------------------
 
 shinyApp(ui, server)
